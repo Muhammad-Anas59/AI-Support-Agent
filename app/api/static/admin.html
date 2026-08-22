@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verve Athletics — Support Console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #15171B;
+    --ink-soft: #23262C;
+    --paper: #F3F1EA;
+    --paper-dim: #E7E4D9;
+    --volt: #C6F135;
+    --volt-dim: #9DBF2A;
+    --flag: #FF4A3D;
+    --slate: #9096A0;
+    --slate-dark: #5C616B;
+    --radius: 10px;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 48px 32px 80px;
+  }
+
+  header.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 2px solid var(--ink-soft);
+    padding-bottom: 24px;
+    margin-bottom: 40px;
+  }
+
+  .brand-mark {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 15px;
+    letter-spacing: 0.08em;
+    color: var(--volt);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  h1 {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 34px;
+    line-height: 1.05;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+
+  .top-right {
+    text-align: right;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--slate);
+  }
+
+  .top-right .dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--volt);
+    margin-right: 6px;
+    box-shadow: 0 0 8px var(--volt);
+  }
+
+  /* Stat lane - scoreboard style summary */
+  .stat-lane {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: var(--ink-soft);
+    border: 1px solid var(--ink-soft);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 48px;
+  }
+
+  .stat {
+    background: var(--ink);
+    padding: 20px 16px;
+    text-align: center;
+  }
+
+  .stat .num {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 32px;
+    color: var(--paper);
+    display: block;
+  }
+
+  .stat.total .num { color: var(--volt); }
+
+  .stat .label {
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--slate);
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* Section headers */
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .section-head h2 {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--paper);
+    margin: 0;
+  }
+
+  .section-head .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--slate);
+  }
+
+  .tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 32px;
+    background: var(--ink-soft);
+    padding: 4px;
+    border-radius: 8px;
+    width: fit-content;
+  }
+
+  .tab-btn {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 8px 18px;
+    border-radius: 6px;
+    border: none;
+    background: transparent;
+    color: var(--slate);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .tab-btn.active {
+    background: var(--volt);
+    color: var(--ink);
+  }
+
+  .tab-btn:not(.active):hover { color: var(--paper); }
+
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* Ticket "bib cards" - signature element */
+  .ticket-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .ticket {
+    display: grid;
+    grid-template-columns: 64px 1fr auto;
+    align-items: center;
+    background: var(--ink-soft);
+    border-radius: var(--radius);
+    border-left: 4px solid var(--slate-dark);
+    padding: 16px 20px;
+    gap: 20px;
+  }
+
+  .ticket.cat-sentiment_urgency { border-left-color: var(--flag); }
+  .ticket.cat-policy_conflict { border-left-color: var(--volt); }
+  .ticket.cat-low_confidence { border-left-color: #7DB8FF; }
+  .ticket.cat-order_not_found { border-left-color: #FFB454; }
+  .ticket.cat-api_error { border-left-color: var(--slate); }
+
+  .bib {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 28px;
+    text-align: center;
+    color: var(--slate-dark);
+    line-height: 1;
+  }
+
+  .ticket.cat-sentiment_urgency .bib { color: var(--flag); }
+  .ticket.cat-policy_conflict .bib { color: var(--volt); }
+
+  .ticket-body .msg {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--paper);
+    margin-bottom: 4px;
+  }
+
+  .ticket-body .reason {
+    font-size: 13px;
+    color: var(--slate);
+    line-height: 1.4;
+  }
+
+  .ticket-meta {
+    text-align: right;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--slate-dark);
+    white-space: nowrap;
+  }
+
+  .cat-pill {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: var(--ink);
+    color: var(--slate);
+    margin-bottom: 6px;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--slate);
+    font-size: 14px;
+  }
+
+  .empty-state .big {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 20px;
+    color: var(--paper);
+    margin-bottom: 8px;
+  }
+
+  /* Policy editor */
+  .policy-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .policy-item {
+    background: var(--ink-soft);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .policy-header {
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--paper);
+  }
+
+  .policy-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .policy-num {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 13px;
+    color: var(--ink);
+    background: var(--volt);
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .policy-header:hover { background: rgba(255,255,255,0.03); }
+
+  .policy-header .chevron {
+    color: var(--slate);
+    transition: transform 0.15s ease;
+    font-size: 12px;
+  }
+
+  .policy-item.open .chevron { transform: rotate(90deg); color: var(--volt); }
+
+  .policy-editor {
+    display: none;
+    padding: 0 20px 20px;
+  }
+
+  .policy-item.open .policy-editor { display: block; }
+
+  .policy-editor textarea {
+    width: 100%;
+    min-height: 220px;
+    background: var(--ink);
+    color: var(--paper);
+    border: 1px solid var(--slate-dark);
+    border-radius: 6px;
+    padding: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.6;
+    resize: vertical;
+  }
+
+  .policy-editor textarea:focus {
+    outline: none;
+    border-color: var(--volt);
+  }
+
+  .save-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+  }
+
+  .save-btn {
+    background: var(--volt);
+    color: var(--ink);
+    border: none;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 9px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  .save-btn:hover { background: var(--volt-dim); }
+  .save-btn:disabled { opacity: 0.5; cursor: default; }
+
+  .save-note {
+    font-size: 11px;
+    color: var(--slate);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .save-note.success { color: var(--volt); }
+
+  @media (max-width: 640px) {
+    .stat-lane { grid-template-columns: repeat(2, 1fr); }
+    .ticket { grid-template-columns: 44px 1fr; }
+    .ticket-meta { grid-column: 1 / -1; text-align: left; margin-top: 4px; }
+    h1 { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div>
+      <div class="brand-mark">Verve Athletics</div>
+      <h1>Support Console</h1>
+    </div>
+    <div class="top-right">
+      <div><span class="dot"></span>Assistant live</div>
+      <div id="last-updated">—</div>
+    </div>
+  </header>
+
+  <div class="stat-lane" id="stat-lane">
+    <div class="stat total"><span class="num" id="stat-total">—</span><span class="label">Total</span></div>
+    <div class="stat"><span class="num" id="stat-sentiment_urgency">—</span><span class="label">Urgent</span></div>
+    <div class="stat"><span class="num" id="stat-policy_conflict">—</span><span class="label">Conflicts</span></div>
+    <div class="stat"><span class="num" id="stat-low_confidence">—</span><span class="label">Unsure</span></div>
+    <div class="stat"><span class="num" id="stat-order_not_found">—</span><span class="label">Order N/F</span></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-view="tickets">Tickets</button>
+    <button class="tab-btn" data-view="policies">Policies</button>
+  </div>
+
+  <div class="view active" id="view-tickets">
+    <div class="section-head">
+      <h2>Escalation Queue</h2>
+      <span class="eyebrow">sorted by newest</span>
+    </div>
+    <div class="ticket-grid" id="ticket-grid">
+      <div class="empty-state">Loading…</div>
+    </div>
+  </div>
+
+  <div class="view" id="view-policies">
+    <div class="section-head">
+      <h2>Policy Documents</h2>
+      <span class="eyebrow">edit → save → re-run embedder.py</span>
+    </div>
+    <div class="policy-list" id="policy-list">
+      <div class="empty-state">Loading…</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const CATEGORY_LABELS = {
+  sentiment_urgency: "Urgent",
+  policy_conflict: "Conflict",
+  low_confidence: "Unsure",
+  order_not_found: "Order N/F",
+  api_error: "System"
+};
+
+const CATEGORY_NUMBERS = {
+  sentiment_urgency: "01",
+  policy_conflict: "02",
+  low_confidence: "03",
+  order_not_found: "04",
+  api_error: "05"
+};
+
+function timeAgo(isoString) {
+  const diff = (Date.now() - new Date(isoString)) / 1000;
+  if (diff < 60) return "just now";
+  if (diff < 3600) return Math.floor(diff / 60) + "m ago";
+  if (diff < 86400) return Math.floor(diff / 3600) + "h ago";
+  return Math.floor(diff / 86400) + "d ago";
+}
+
+async function loadSummary() {
+  try {
+    const res = await fetch('/api/summary');
+    const data = await res.json();
+    document.getElementById('stat-total').textContent = data.total || 0;
+    ['sentiment_urgency', 'policy_conflict', 'low_confidence', 'order_not_found'].forEach(cat => {
+      document.getElementById('stat-' + cat).textContent = data[cat] || 0;
+    });
+  } catch (e) { console.error(e); }
+}
+
+async function loadTickets() {
+  const grid = document.getElementById('ticket-grid');
+  try {
+    const res = await fetch('/api/tickets');
+    const tickets = await res.json();
+
+    if (tickets.length === 0) {
+      grid.innerHTML = '<div class="empty-state"><div class="big">Queue is clear</div>No escalations yet — the assistant is handling everything on its own.</div>';
+      return;
+    }
+
+    grid.innerHTML = tickets.map(t => `
+      <div class="ticket cat-${t.category}">
+        <div class="bib">${CATEGORY_NUMBERS[t.category] || "00"}</div>
+        <div class="ticket-body">
+          <div class="cat-pill">${CATEGORY_LABELS[t.category] || t.category}</div>
+          <div class="msg">"${escapeHtml(t.customer_message)}"</div>
+          <div class="reason">${escapeHtml(t.reason)}</div>
+        </div>
+        <div class="ticket-meta">${timeAgo(t.timestamp)}</div>
+      </div>
+    `).join('');
+  } catch (e) {
+    grid.innerHTML = '<div class="empty-state">Could not load tickets — is admin_app.py running?</div>';
+  }
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function formatPolicyName(filename) {
+  // "02_returns_policy.txt" -> { number: "02", title: "Returns Policy" }
+  // "03_website_faq.txt" -> { number: "03", title: "Website FAQ" }
+  const ACRONYMS = { faq: "FAQ" };
+
+  const withoutExt = filename.replace(/\.txt$/, '');
+  const match = withoutExt.match(/^(\d+)_(.+)$/);
+  if (!match) return { number: "—", title: withoutExt };
+  const number = match[1];
+  const title = match[2]
+    .split('_')
+    .map(word => ACRONYMS[word.toLowerCase()] || (word.charAt(0).toUpperCase() + word.slice(1)))
+    .join(' ');
+  return { number, title };
+}
+
+async function loadPolicies() {
+  const list = document.getElementById('policy-list');
+  try {
+    const res = await fetch('/api/policies');
+    const policies = await res.json();
+
+    list.innerHTML = policies.map((p, i) => {
+      const { number, title } = formatPolicyName(p.filename);
+      return `
+      <div class="policy-item" id="policy-${i}">
+        <div class="policy-header" onclick="togglePolicy(${i})">
+          <span class="policy-title"><span class="policy-num">${number}</span>${title}</span>
+          <span class="chevron">▸</span>
+        </div>
+        <div class="policy-editor">
+          <textarea id="textarea-${i}">${escapeHtml(p.content)}</textarea>
+          <div class="save-row">
+            <button class="save-btn" onclick="savePolicy('${p.filename}', ${i})">Save changes</button>
+            <span class="save-note" id="note-${i}"></span>
+          </div>
+        </div>
+      </div>
+      `;
+    }).join('');
+  } catch (e) {
+    list.innerHTML = '<div class="empty-state">Could not load policies — is admin_app.py running?</div>';
+  }
+}
+
+function togglePolicy(i) {
+  document.getElementById('policy-' + i).classList.toggle('open');
+}
+
+async function savePolicy(filename, i) {
+  const btn = event.target;
+  const note = document.getElementById('note-' + i);
+  const content = document.getElementById('textarea-' + i).value;
+
+  btn.disabled = true;
+  note.textContent = "Saving…";
+  note.classList.remove('success');
+
+  try {
+    const res = await fetch('/api/policies/' + encodeURIComponent(filename), {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ content })
+    });
+    const data = await res.json();
+    note.textContent = "Saved — re-run embedder.py to apply";
+    note.classList.add('success');
+  } catch (e) {
+    note.textContent = "Save failed";
+  }
+  btn.disabled = false;
+}
+
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('view-' + btn.dataset.view).classList.add('active');
+  });
+});
+
+function refresh() {
+  loadSummary();
+  loadTickets();
+  document.getElementById('last-updated').textContent = 'updated ' + new Date().toLocaleTimeString();
+}
+
+refresh();
+loadPolicies();
+setInterval(refresh, 15000);
+</script>
+</body>
+</html>

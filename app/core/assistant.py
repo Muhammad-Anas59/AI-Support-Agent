@@ -1,0 +1,170 @@
+"""
+assistant.py
+
+Job: This is the single entry point a customer actually talks to. It ties
+together the three pieces built so far:
+- router.py       -> decides if the question is about an order or a policy
+- order_lookup.py -> answers order-status questions with real Shopify data
+- retriever.py     -> answers policy questions from the RAG pipeline
+
+The customer just asks a question in plain language; this file figures out
+internally which engine should handle it and returns one clean answer.
+"""
+
+import sys
+import os
+
+sys.path.insert(0, os.path.dirname(__file__))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "integrations"))
+
+from router import classify_question, extract_order_details
+from retriever import load_index, answer_question
+from order_lookup import find_order
+from sentiment_detector import check_sentiment
+from escalation_logger import log_escalation
+
+
+def handle_order_question(question, conversation_state):
+    """Handles an order-status question. If order number or total is
+    missing, asks a follow-up instead of guessing or escalating - this
+    mirrors how a real support agent would respond."""
+    order_number, total = extract_order_details(question)
+
+    # Fill in anything we already collected earlier in this conversation
+    order_number = order_number or conversation_state.get("order_number")
+    total = total or conversation_state.get("total")
+
+    if not order_number:
+        conversation_state["awaiting"] = "order_number"
+        return {
+            "answer": "Sure, I can check that for you - what's your order number?",
+            "escalated": False,
+            "needs_followup": True
+        }
+
+    if not total:
+        conversation_state["order_number"] = order_number
+        conversation_state["awaiting"] = "total"
+        return {
+            "answer": "Thanks - and to verify it's your order, what was the total amount charged?",
+            "escalated": False,
+            "needs_followup": True
+        }
+
+    result = find_order(order_number, total)
+    conversation_state.clear()  # verification done, reset for next question
+
+    if not result["found"]:
+        log_escalation(
+            customer_message=question,
+            reason="Order lookup failed - no match found for provided order number and total",
+            category="order_not_found"
+        )
+        return {
+            "answer": "I couldn't find an order matching those details. Could you double check the order number and total? If it still doesn't match, I'll get a human to help.",
+            "escalated": False,
+            "needs_followup": False
+        }
+
+    reply = f"Your order {result['order_number']} is currently: {result['status'].replace('_', ' ')}."
+    if result["tracking_number"]:
+        reply += f" Tracking number: {result['tracking_number']} via {result['carrier']}. Track it here: {result['tracking_url']}"
+    else:
+        reply += " It hasn't shipped yet, so there's no tracking number available."
+
+    return {
+        "answer": reply,
+        "escalated": False,
+        "needs_followup": False
+    }
+
+
+def handle_policy_question(question, index, chunks):
+    """Handles a general policy question via the existing RAG pipeline."""
+    result = answer_question(question, index, chunks)
+
+    if result["escalated"]:
+        reason = result.get("reason", "")
+        if "disagree" in reason.lower() or "conflict" in reason.lower():
+            answer = "I found conflicting information in our policies on this - I don't want to give you the wrong answer, so I'm flagging this for a team member to confirm and get back to you."
+            category = "policy_conflict"
+        else:
+            answer = "I don't have a confident answer to that from our policies - I'm flagging this for a team member to follow up with you."
+            category = "low_confidence"
+
+        log_escalation(
+            customer_message=question,
+            reason=reason,
+            category=category
+        )
+
+        return {
+            "answer": answer,
+            "escalated": True,
+            "reason": reason,
+            "needs_followup": False
+        }
+
+    return {
+        "answer": result["answer"],
+        "escalated": False,
+        "needs_followup": False
+    }
+
+
+def get_response(question, conversation_state, index, chunks):
+    """Main function: classifies the question, then routes it to the
+    right handler. conversation_state persists across turns so follow-up
+    answers (like 'my order number is 1001') are understood in context."""
+
+    # If we're mid-way through collecting order details, treat this
+    # message as answering that, not as a brand new question to classify
+    if conversation_state.get("awaiting"):
+        return handle_order_question(question, conversation_state)
+
+    # Sentiment/urgency check runs FIRST, before any routing - anger,
+    # urgency, or legal/safety language always escalates immediately,
+    # regardless of whether a confident answer could otherwise be given
+    sentiment = check_sentiment(question)
+    if sentiment["flagged"]:
+        reason = f"Sentiment/urgency flag: {sentiment['reason']}"
+        log_escalation(
+            customer_message=question,
+            reason=reason,
+            category="sentiment_urgency"
+        )
+        return {
+            "answer": "I can see this is important and want to make sure it's handled properly - I'm escalating this to a team member right away.",
+            "escalated": True,
+            "reason": reason,
+            "needs_followup": False
+        }
+
+    label = classify_question(question)
+
+    if label == "order":
+        return handle_order_question(question, conversation_state)
+    else:
+        return handle_policy_question(question, index, chunks)
+
+
+if __name__ == "__main__":
+    index, chunks = load_index()
+    conversation_state = {}
+
+    print("Verve Athletics Support Assistant (type 'quit' to exit)\n")
+    while True:
+        question = input("You: ")
+        if question.lower() == "quit":
+            break
+        try:
+            response = get_response(question, conversation_state, index, chunks)
+            print(f"Assistant: {response['answer']}\n")
+        except Exception as e:
+            log_escalation(
+                customer_message=question,
+                reason=f"API/system error: {e}",
+                category="api_error"
+            )
+            print("Assistant: I'm having trouble processing that right now - I'm flagging this for a team member to follow up with you directly.\n")
+            print(f"[internal error log: {e}]\n")
