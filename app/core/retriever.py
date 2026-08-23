@@ -56,7 +56,7 @@ def l2_distance_to_confidence(distance):
     return 1 / (1 + distance)
 
 
-def retrieve_relevant_chunks(question, index, chunks, top_k=3):
+def retrieve_relevant_chunks(question, index, chunks, top_k=5):
     """Finds the top_k chunks most similar in meaning to the question.
     Returns a list of dicts with the chunk text, source, and confidence score."""
     query_vector = np.array([embed_query(question)]).astype("float32")

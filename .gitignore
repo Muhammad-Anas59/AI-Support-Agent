@@ -7,3 +7,4 @@ venv/
 *.faiss
 app/data/*.json
 app/data/*.faiss
+app/data/*.jsonl

@@ -17,7 +17,7 @@ import os
 sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "integrations"))
 
-from router import classify_question, extract_order_details
+from router import classify_question, extract_order_details, parse_order_number, parse_amount
 from retriever import load_index, answer_question
 from order_lookup import find_order
 from sentiment_detector import check_sentiment
@@ -28,22 +28,36 @@ from interaction_logger import log_interaction
 def handle_order_question(question, conversation_state):
     """Handles an order-status question. If order number or total is
     missing, asks a follow-up instead of guessing or escalating - this
-    mirrors how a real support agent would respond."""
-    order_number, total = extract_order_details(question)
+    mirrors how a real support agent would respond.
 
-    # Fill in anything we already collected earlier in this conversation
-    order_number = order_number or conversation_state.get("order_number")
-    total = total or conversation_state.get("total")
+    Parsing depends on what we're currently waiting for:
+    - Nothing yet (fresh message): use extract_order_details, which
+      handles an open-ended message that might contain an order number,
+      a total, both, or neither, and is deliberately strict about the
+      total needing a decimal point to avoid confusing it with an order
+      number when both appear together.
+    - Specifically awaiting an order number or a total: use the lenient
+      single-purpose parsers instead, since we already know the ENTIRE
+      reply is answering one specific question - this is what fixes the
+      bug where a plain reply like '80' (no decimal) would never be
+      recognized as an answer to 'what was the total charged?' and would
+      leave the customer stuck being asked the same question forever.
+    - If a reply doesn't contain what we're looking for at all, we don't
+      keep asking - the conversation state resets so the next message
+      gets classified fresh, giving the customer an escape valve instead
+      of a dead end.
+    """
+    awaiting = conversation_state.get("awaiting")
 
-    if not order_number:
-        conversation_state["awaiting"] = "order_number"
-        return {
-            "answer": "Sure, I can check that for you - what's your order number?",
-            "escalated": False,
-            "needs_followup": True
-        }
-
-    if not total:
+    if awaiting == "order_number":
+        order_number = parse_order_number(question)
+        if not order_number:
+            conversation_state.clear()
+            return {
+                "answer": "I couldn't find an order number in that - no worries, what else can I help with?",
+                "escalated": False,
+                "needs_followup": False
+            }
         conversation_state["order_number"] = order_number
         conversation_state["awaiting"] = "total"
         return {
@@ -51,6 +65,38 @@ def handle_order_question(question, conversation_state):
             "escalated": False,
             "needs_followup": True
         }
+
+    if awaiting == "total":
+        total = parse_amount(question)
+        if not total:
+            conversation_state.clear()
+            return {
+                "answer": "I couldn't find an amount in that - no worries, what else can I help with?",
+                "escalated": False,
+                "needs_followup": False
+            }
+        order_number = conversation_state.get("order_number")
+
+    else:
+        # Fresh message - not currently mid-flow
+        order_number, total = extract_order_details(question)
+
+        if not order_number:
+            conversation_state["awaiting"] = "order_number"
+            return {
+                "answer": "Sure, I can check that for you - what's your order number?",
+                "escalated": False,
+                "needs_followup": True
+            }
+
+        if not total:
+            conversation_state["order_number"] = order_number
+            conversation_state["awaiting"] = "total"
+            return {
+                "answer": "Thanks - and to verify it's your order, what was the total amount charged?",
+                "escalated": False,
+                "needs_followup": True
+            }
 
     result = find_order(order_number, total)
     conversation_state.clear()  # verification done, reset for next question
@@ -87,8 +133,17 @@ def handle_policy_question(question, index, chunks):
     """Handles a general policy question via the existing RAG pipeline."""
     result = answer_question(question, index, chunks)
 
-    if result["escalated"]:
-        reason = result.get("reason", "")
+    # A third escalation path: retrieval confidence was high enough to
+    # proceed, but the LLM itself decided the retrieved text doesn't
+    # actually answer the question, and returns this exact fallback
+    # string as a normal (non-escalated) answer. Catch it here and treat
+    # it the same as a real escalation instead of showing the raw
+    # internal string to the customer.
+    NO_ANSWER_FALLBACK = "I don't have enough information to answer this confidently."
+    llm_declined = (not result["escalated"]) and result.get("answer", "").strip() == NO_ANSWER_FALLBACK
+
+    if result["escalated"] or llm_declined:
+        reason = result.get("reason", "") or "The retrieved policy text didn't actually address this question."
         if "disagree" in reason.lower() or "conflict" in reason.lower():
             answer = "I found conflicting information in our policies on this - I don't want to give you the wrong answer, so I'm flagging this for a team member to confirm and get back to you."
             category = "policy_conflict"
