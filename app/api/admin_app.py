@@ -20,6 +20,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "core"))
 
 from escalation_logger import get_all_tickets, get_ticket_summary
+from interaction_logger import get_analytics_summary
 
 app = Flask(__name__, static_folder="static", static_url_path="")
 
@@ -43,6 +44,14 @@ def api_tickets():
 def api_summary():
     """Returns ticket counts by category, for the top-of-page stats."""
     return jsonify(get_ticket_summary())
+
+
+@app.route("/api/analytics")
+def api_analytics():
+    """Returns the full analytics summary: total volume, resolution
+    rate, breakdown by handler and escalation category, average
+    confidence, and estimated time saved. Powers the Analytics tab."""
+    return jsonify(get_analytics_summary())
 
 
 @app.route("/api/policies")

@@ -20,7 +20,7 @@ from google import genai
 
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
-CONFLICT_MODEL = "gemini-3.6-flash"
+CONFLICT_MODEL = "gemini-3.5-flash-lite"
 CONFLICT_LOG_PATH = os.path.join("app", "data", "conflicts_log.json")
 
 

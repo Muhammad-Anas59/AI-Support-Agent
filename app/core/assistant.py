@@ -22,6 +22,7 @@ from retriever import load_index, answer_question
 from order_lookup import find_order
 from sentiment_detector import check_sentiment
 from escalation_logger import log_escalation
+from interaction_logger import log_interaction
 
 
 def handle_order_question(question, conversation_state):
@@ -60,6 +61,7 @@ def handle_order_question(question, conversation_state):
             reason="Order lookup failed - no match found for provided order number and total",
             category="order_not_found"
         )
+        log_interaction(question, handler="order", resolved=False, category="order_not_found")
         return {
             "answer": "I couldn't find an order matching those details. Could you double check the order number and total? If it still doesn't match, I'll get a human to help.",
             "escalated": False,
@@ -71,6 +73,8 @@ def handle_order_question(question, conversation_state):
         reply += f" Tracking number: {result['tracking_number']} via {result['carrier']}. Track it here: {result['tracking_url']}"
     else:
         reply += " It hasn't shipped yet, so there's no tracking number available."
+
+    log_interaction(question, handler="order", resolved=True)
 
     return {
         "answer": reply,
@@ -97,6 +101,8 @@ def handle_policy_question(question, index, chunks):
             reason=reason,
             category=category
         )
+        log_interaction(question, handler="policy", resolved=False,
+                         confidence=result.get("confidence"), category=category)
 
         return {
             "answer": answer,
@@ -104,6 +110,8 @@ def handle_policy_question(question, index, chunks):
             "reason": reason,
             "needs_followup": False
         }
+
+    log_interaction(question, handler="policy", resolved=True, confidence=result.get("confidence"))
 
     return {
         "answer": result["answer"],
@@ -133,6 +141,7 @@ def get_response(question, conversation_state, index, chunks):
             reason=reason,
             category="sentiment_urgency"
         )
+        log_interaction(question, handler="sentiment_block", resolved=False, category="sentiment_urgency")
         return {
             "answer": "I can see this is important and want to make sure it's handled properly - I'm escalating this to a team member right away.",
             "escalated": True,
