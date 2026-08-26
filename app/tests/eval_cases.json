@@ -1,0 +1,69 @@
+[
+  {"id": "policy_shipping_standard", "category": "policy_qa", "question": "How long does standard shipping take?", "expected": {"escalated": false, "must_contain_any": ["5-7", "5 to 7"]}},
+  {"id": "policy_shipping_international", "category": "policy_qa", "question": "How long does international shipping take?", "expected": {"escalated": false, "must_contain_any": ["10-15", "10 to 15"]}},
+  {"id": "policy_lost_package", "category": "policy_qa", "question": "What happens if my package is lost?", "expected": {"escalated": false, "must_contain_any": ["21", "30"]}},
+  {"id": "policy_warranty_footwear", "category": "policy_qa", "question": "Does my footwear have a warranty?", "expected": {"escalated": false, "must_contain_any": ["6-month", "6 month", "six month"]}},
+  {"id": "policy_warranty_apparel", "category": "policy_qa", "question": "What's the warranty on apparel?", "expected": {"escalated": false, "must_contain_any": ["3-month", "3 month", "three month"]}},
+  {"id": "policy_cancellation_window", "category": "policy_qa", "question": "Can I cancel my order after placing it?", "expected": {"escalated": false, "must_contain_any": ["1 hour", "one hour", "1-hour"]}},
+  {"id": "policy_payment_methods", "category": "policy_qa", "question": "What payment methods do you accept?", "expected": {"escalated": false, "must_contain_any": ["visa", "paypal", "mastercard"]}},
+  {"id": "policy_loyalty_program", "category": "policy_qa", "question": "How does the rewards program work?", "expected": {"escalated": false, "must_contain_any": ["100 points", "$5"]}},
+  {"id": "policy_wrong_item", "category": "policy_qa", "question": "What if I received the wrong item?", "expected": {"escalated": false, "must_contain_any": ["no return shipping cost", "our error", "expedited replacement"]}},
+  {"id": "policy_address_change", "category": "policy_qa", "question": "Can I change my shipping address?", "expected": {"escalated": false, "must_contain_any": ["1 hour", "one hour", "1-hour"]}},
+
+  {"id": "conflict_return_window", "category": "conflict_detection", "question": "How long do I have to return an item?", "expected": {"escalated": true, "must_contain_any": ["conflicting"]}},
+  {"id": "conflict_refund_time", "category": "conflict_detection", "question": "How long does a refund take?", "expected": {"escalated": true, "must_contain_any": ["conflicting"]}},
+  {"id": "conflict_sale_items", "category": "conflict_detection", "question": "Can I return a sale item?", "expected": {"escalated": true, "must_contain_any": ["conflicting"]}},
+  {"id": "conflict_damaged_item", "category": "conflict_detection", "question": "What if my item arrives damaged?", "expected": {"escalated": true, "must_contain_any": ["conflicting"]}},
+
+  {"id": "outofscope_yoga_mats", "category": "policy_qa", "question": "Do you sell yoga mats?", "expected": {"escalated": true, "must_contain_any": ["confident answer", "flagging"]}},
+  {"id": "outofscope_playlist", "category": "policy_qa", "question": "Can you recommend a good running playlist?", "expected": {"escalated": true, "must_contain_any": ["confident answer", "flagging"]}},
+
+  {"id": "router_order_1", "category": "router", "question": "Where's my order #1001?", "expected": {"label": "order"}},
+  {"id": "router_order_2", "category": "router", "question": "Has my package shipped yet?", "expected": {"label": "order"}},
+  {"id": "router_order_3", "category": "router", "question": "Track order 1002", "expected": {"label": "order"}},
+  {"id": "router_policy_1", "category": "router", "question": "What's your return policy?", "expected": {"label": "policy"}},
+  {"id": "router_policy_2", "category": "router", "question": "My package hasn't moved in 10 days, what should I do?", "expected": {"label": "policy"}},
+  {"id": "router_policy_3", "category": "router", "question": "What happens if my order never arrives?", "expected": {"label": "policy"}},
+
+  {"id": "sentiment_legal_threat", "category": "sentiment", "question": "This is absolutely unacceptable, I am contacting my lawyer and disputing this charge.", "expected": {"flagged": true}},
+  {"id": "sentiment_allergic_reaction", "category": "sentiment", "question": "I had an allergic reaction to the fabric in your shirt and my skin is burning right now.", "expected": {"flagged": true}},
+  {"id": "sentiment_anger", "category": "sentiment", "question": "I am furious, this is the third time you have sent me the wrong order and no one has helped me.", "expected": {"flagged": true}},
+  {"id": "sentiment_mild_complaint", "category": "sentiment", "question": "This is taking forever, when will my order arrive?", "expected": {"flagged": false}},
+  {"id": "sentiment_neutral", "category": "sentiment", "question": "Can I exchange my shoes for a different size?", "expected": {"flagged": false}},
+
+  {"id": "order_lookup_shipped", "category": "order_lookup", "order_number": "1002", "total": "80.00", "expected": {"found": true, "status": "shipped"}},
+  {"id": "order_lookup_processing", "category": "order_lookup", "order_number": "1001", "total": "200.00", "expected": {"found": true, "status": "processing"}},
+  {"id": "order_lookup_wrong_total", "category": "order_lookup", "order_number": "1002", "total": "999.99", "expected": {"found": false}},
+
+  {"id": "policy_swap_color", "category": "policy_qa", "question": "Is there a fee to swap for a different color?", "expected": {"escalated": false, "must_contain_any": ["free", "no charge", "no cost"]}},
+  {"id": "policy_lost_domestic_window", "category": "policy_qa", "question": "What if my package sat at the same tracking status for over a week?", "expected": {"escalated": false, "must_contain_any": ["7", "carrier", "investigation"]}},
+  {"id": "policy_points_needed", "category": "policy_qa", "question": "How many points do I need for a $5 discount?", "expected": {"escalated": false, "must_contain_any": ["100"]}},
+  {"id": "policy_points_expire", "category": "policy_qa", "question": "Do my reward points expire?", "expected": {"escalated": false, "must_contain_any": ["12 months", "12-month", "twelve months"]}},
+  {"id": "policy_giftcard_promo", "category": "policy_qa", "question": "Can I use a gift card and a promo code on the same order?", "expected": {"escalated": false, "must_contain_any": ["gift card"]}},
+  {"id": "policy_payment_failure", "category": "policy_qa", "question": "What happens if my payment doesn't go through?", "expected": {"escalated": false, "must_contain_any": ["24 hours", "24-hour"]}},
+  {"id": "policy_data_after_deletion", "category": "policy_qa", "question": "Do you keep my order history after I delete my account?", "expected": {"escalated": false, "must_contain_any": ["7 years", "seven years"]}},
+  {"id": "policy_cod", "category": "policy_qa", "question": "Is cash on delivery available?", "expected": {"escalated": false, "must_contain_any": ["do not accept", "not accept", "no"]}},
+  {"id": "policy_return_window_alt_phrasing", "category": "conflict_detection", "question": "Within how many days must I return something to get my money back?", "expected": {"escalated": true, "must_contain_any": ["conflicting"]}},
+  {"id": "policy_free_vs_defect_shipping", "category": "policy_qa", "question": "Do you charge for return shipping if you sent me the wrong size, versus if I just changed my mind?", "expected": {"escalated": false, "must_contain_any": ["free", "no cost", "no charge"]}},
+
+  {"id": "outofscope_human_request", "category": "policy_qa", "question": "Can I speak to a human right now?", "expected": {"escalated": true, "must_contain_any": ["confident answer", "flagging"]}},
+  {"id": "outofscope_store_location", "category": "policy_qa", "question": "Do you have a physical store in Lahore?", "expected": {"escalated": true, "must_contain_any": ["confident answer", "flagging"]}},
+  {"id": "outofscope_weather", "category": "policy_qa", "question": "What's the weather like today?", "expected": {"escalated": true, "must_contain_any": ["confident answer", "flagging"]}},
+  {"id": "multi_intent_return_and_shipping", "category": "policy_qa", "question": "What's your return policy, and also do you ship to Canada?", "expected": {"escalated": false, "must_contain_any": ["canada"]}},
+
+  {"id": "router_order_status_normal", "category": "router", "question": "I placed order 1002 three days ago and it still says processing, is that normal?", "expected": {"label": "policy"}},
+  {"id": "router_order_modify", "category": "router", "question": "I need to update my order 1002, can you help?", "expected": {"label": "policy"}},
+  {"id": "router_order_not_shipped_alt", "category": "router", "question": "It's been 6 days and order 1001 hasn't shipped, what are my options?", "expected": {"label": "policy"}},
+  {"id": "router_order_still_coming", "category": "router", "question": "Is my package still on its way?", "expected": {"label": "order"}},
+
+  {"id": "sentiment_borderline_frustration", "category": "sentiment", "question": "I've asked about this twice already and still no response, kind of frustrating.", "expected": {"flagged": false}},
+  {"id": "sentiment_urgent_but_not_safety", "category": "sentiment", "question": "Please help ASAP, my card was charged twice!", "expected": {"flagged": true}},
+  {"id": "sentiment_safety_hazard", "category": "sentiment", "question": "This item literally caught fire while charging, is that normal?", "expected": {"flagged": true}},
+  {"id": "sentiment_review_threat", "category": "sentiment", "question": "I will leave a bad review if this isn't fixed.", "expected": {"flagged": false}},
+  {"id": "sentiment_explicit_legal", "category": "sentiment", "question": "I'm going to sue if this isn't resolved.", "expected": {"flagged": true}},
+  {"id": "sentiment_plain_complaint", "category": "sentiment", "question": "Not happy with the quality of this shirt.", "expected": {"flagged": false}},
+
+  {"id": "order_lookup_nonexistent", "category": "order_lookup", "order_number": "9999", "total": "50.00", "expected": {"found": false}},
+  {"id": "order_lookup_whitespace", "category": "order_lookup", "order_number": " 1001 ", "total": " 200.00 ", "expected": {"found": true, "status": "processing"}},
+  {"id": "order_lookup_empty_number", "category": "order_lookup", "order_number": "", "total": "80.00", "expected": {"found": false}}
+]

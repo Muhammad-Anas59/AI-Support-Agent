@@ -1,0 +1,672 @@
+{
+  "summary": {
+    "total": 57,
+    "passed": 54,
+    "failed": 3,
+    "overall_accuracy": 94.7,
+    "by_category": {
+      "policy_qa": {
+        "total": 24,
+        "passed": 23
+      },
+      "conflict_detection": {
+        "total": 6,
+        "passed": 5
+      },
+      "router": {
+        "total": 10,
+        "passed": 10
+      },
+      "sentiment": {
+        "total": 11,
+        "passed": 10
+      },
+      "order_lookup": {
+        "total": 6,
+        "passed": 6
+      }
+    },
+    "category_accuracy": {
+      "policy_qa": 95.8,
+      "conflict_detection": 83.3,
+      "router": 100.0,
+      "sentiment": 90.9,
+      "order_lookup": 100.0
+    }
+  },
+  "results": [
+    {
+      "id": "policy_shipping_standard",
+      "category": "policy_qa",
+      "question": "How long does standard shipping take?",
+      "passed": true,
+      "details": {
+        "actual_escalated": false,
+        "actual_answer": "Standard shipping typically takes 5 to 7 business days within the USA.",
+        "escalated_match": true,
+        "content_match": true
+      }
+    },
+    {
+      "id": "policy_shipping_international",
+      "category": "policy_qa",
+      "question": "How long does international shipping take?",
+      "passed": false,
+      "details": {
+        "error": "Server disconnected without sending a response."
+      }
+    },
+    {
+      "id": "policy_lost_package",
+      "category": "policy_qa",
+      "question": "What happens if my package is lost?",
+      "passed": true,
+      "details": {
+        "actual_escalated": false,
+        "actual_answer": "If a package shows no tracking movement for 7 or more business days domestically, you can contact support to start an investigation with the carrier. Per our shipping policy, we don't issue refunds for delayed packages until the carrier officially confirms them as lost, which is typically after 21 days for domestic orders.",
+        "escalated_match": true,
+        "content_match": true
+      }
+    },
+    {
+      "id": "policy_warranty_footwear",
+      "category": "policy_qa",
+      "question": "Does my footwear have a warranty?",
+      "passed": true,
+      "details": {
+        "actual_escalated": false,
+        "actual_answer": "Yes, according to our manufacturer warranty policy, all footwear comes with a 6-month warranty against manufacturing defects like sole separation, stitching failure, or zipper malfunction.",
+        "escalated_match": true,
+        "content_match": true
+      }
+    },
+    {
+      "id": "policy_warranty_apparel",
+      "category": "policy_qa",
+      "question": "What's the warranty on apparel?",
+      "passed": true,
+      "details": {
+        "actual_escalated": false,
+        "actual_answer": "According to our warranty policy, apparel comes with a 3-month warranty against fabric defects like seam tearing or print peeling.",
+        "escalated_match": true,
+        "content_match": true
+      }
+    },
+    {
+      "id": "policy_cancellation_window",
+      "category": "policy_qa",
+      "question": "Can I cancel my order after placing it?",
+      "passed": true,
+      "details": {
+        "actual_escalated": false,
+        "actual_answer": "You can cancel your order free of charge within 1 hour of placing it, as long as it hasn't entered the fulfillment process yet. After that 1-hour window, orders typically cannot be cancelled and you'll need to wait for delivery to initiate a standard return.",
+        "escalated_match": true,
+        "content_match": true
+      }
+    },
+    {
+      "id": "policy_payment_methods",
+      "category": "policy_qa",
+      "question": "What payment methods do you accept?",
+      "passed": true,
+      "details": {
+        "actual_escalated": false,
+        "actual_answer": "We accept Visa, Mastercard, American Express, PayPal, Apple Pay, and Google Pay, though we don't accept cash on delivery or bank transfers.",
+        "escalated_match": true,
+        "content_match": true
+      }
+    },
+    {
+      "id": "policy_loyalty_program",
+      "category": "policy_qa",
+      "question": "How does the rewards program work?",
+      "passed": true,
+      "details": {
+        "actual_escalated": false,
+        "actual_answer": "Hi there! With our Verve Rewards program, you earn 1 point for every $1 you spend, and 100 points will give you $5 off a future order. Just keep in mind that your points are credited 7 days after delivery and expire 12 months after they are earned. Let me know if you have any other questions!",
+        "escalated_match": true,
+        "content_match": true
+      }
+    },
+    {
+      "id": "policy_wrong_item",
+      "category": "policy_qa",
+      "question": "What if I received the wrong item?",
+      "passed": true,
+      "details": {
+        "actual_escalated": false,
+        "actual_answer": "If you received the wrong item or the mistake was on our end, our return policy states that there is no return shipping cost, and you may also request expedited replacement shipping at no charge. Let us know if we can help get the correct item sent out to you!",
+        "escalated_match": true,
+        "content_match": true
+      }
+    },
+    {
+      "id": "policy_address_change",
+      "category": "policy_qa",
+      "question": "Can I change my shipping address?",
+      "passed": true,
+      "details": {
+        "actual_escalated": false,
+        "actual_answer": "Hi there! Yes, you can request a change to your shipping address, but our cancellation and modification policy states that it must be done within the same 1-hour window of placing your order. Please reach out to support immediately so we can help check on this for you!",
+        "escalated_match": true,
+        "content_match": true
+      }
+    },
+    {
+      "id": "conflict_return_window",
+      "category": "conflict_detection",
+      "question": "How long do I have to return an item?",
+      "passed": true,
+      "details": {
+        "actual_escalated": true,
+        "actual_answer": "I found conflicting information in our policies on this - I don't want to give you the wrong answer, so I'm flagging this for a team member to confirm and get back to you.",
+        "escalated_match": true,
+        "content_match": true
+      }
+    },
+    {
+      "id": "conflict_refund_time",
+      "category": "conflict_detection",
+      "question": "How long does a refund take?",
+      "passed": true,
+      "details": {
+        "actual_escalated": true,
+        "actual_answer": "I found conflicting information in our policies on this - I don't want to give you the wrong answer, so I'm flagging this for a team member to confirm and get back to you.",
+        "escalated_match": true,
+        "content_match": true
+      }
+    },
+    {
+      "id": "conflict_sale_items",
+      "category": "conflict_detection",
+      "question": "Can I return a sale item?",
+      "passed": true,
+      "details": {
+        "actual_escalated": true,
+        "actual_answer": "I found conflicting information in our policies on this - I don't want to give you the wrong answer, so I'm flagging this for a team member to confirm and get back to you.",
+        "escalated_match": true,
+        "content_match": true
+      }
+    },
+    {
+      "id": "conflict_damaged_item",
+      "category": "conflict_detection",
+      "question": "What if my item arrives damaged?",
+      "passed": true,
+      "details": {
+        "actual_escalated": true,
+        "actual_answer": "I found conflicting information in our policies on this - I don't want to give you the wrong answer, so I'm flagging this for a team member to confirm and get back to you.",
+        "escalated_match": true,
+        "content_match": true
+      }
+    },
+    {
+      "id": "outofscope_yoga_mats",
+      "category": "policy_qa",
+      "question": "Do you sell yoga mats?",
+      "passed": true,
+      "details": {
+        "actual_escalated": true,
+        "actual_answer": "I don't have a confident answer to that from our policies - I'm flagging this for a team member to follow up with you.",
+        "escalated_match": true,
+        "content_match": true
+      }
+    },
+    {
+      "id": "outofscope_playlist",
+      "category": "policy_qa",
+      "question": "Can you recommend a good running playlist?",
+      "passed": true,
+      "details": {
+        "actual_escalated": true,
+        "actual_answer": "I don't have a confident answer to that from our policies - I'm flagging this for a team member to follow up with you.",
+        "escalated_match": true,
+        "content_match": true
+      }
+    },
+    {
+      "id": "router_order_1",
+      "category": "router",
+      "question": "Where's my order #1001?",
+      "passed": true,
+      "details": {
+        "actual_label": "order",
+        "expected_label": "order"
+      }
+    },
+    {
+      "id": "router_order_2",
+      "category": "router",
+      "question": "Has my package shipped yet?",
+      "passed": true,
+      "details": {
+        "actual_label": "order",
+        "expected_label": "order"
+      }
+    },
+    {
+      "id": "router_order_3",
+      "category": "router",
+      "question": "Track order 1002",
+      "passed": true,
+      "details": {
+        "actual_label": "order",
+        "expected_label": "order"
+      }
+    },
+    {
+      "id": "router_policy_1",
+      "category": "router",
+      "question": "What's your return policy?",
+      "passed": true,
+      "details": {
+        "actual_label": "policy",
+        "expected_label": "policy"
+      }
+    },
+    {
+      "id": "router_policy_2",
+      "category": "router",
+      "question": "My package hasn't moved in 10 days, what should I do?",
+      "passed": true,
+      "details": {
+        "actual_label": "policy",
+        "expected_label": "policy"
+      }
+    },
+    {
+      "id": "router_policy_3",
+      "category": "router",
+      "question": "What happens if my order never arrives?",
+      "passed": true,
+      "details": {
+        "actual_label": "policy",
+        "expected_label": "policy"
+      }
+    },
+    {
+      "id": "sentiment_legal_threat",
+      "category": "sentiment",
+      "question": "This is absolutely unacceptable, I am contacting my lawyer and disputing this charge.",
+      "passed": true,
+      "details": {
+        "actual_flagged": true,
+        "reason": "the customer explicitly threatens legal action and a chargeback."
+      }
+    },
+    {
+      "id": "sentiment_allergic_reaction",
+      "category": "sentiment",
+      "question": "I had an allergic reaction to the fabric in your shirt and my skin is burning right now.",
+      "passed": true,
+      "details": {
+        "actual_flagged": true,
+        "reason": "the customer is experiencing a medical reaction and potential safety issue requiring immediate attention."
+      }
+    },
+    {
+      "id": "sentiment_anger",
+      "category": "sentiment",
+      "question": "I am furious, this is the third time you have sent me the wrong order and no one has helped me.",
+      "passed": true,
+      "details": {
+        "actual_flagged": true,
+        "reason": "the customer expresses genuine anger and frustration over a recurring unresolved issue."
+      }
+    },
+    {
+      "id": "sentiment_mild_complaint",
+      "category": "sentiment",
+      "question": "This is taking forever, when will my order arrive?",
+      "passed": true,
+      "details": {
+        "actual_flagged": false,
+        "reason": "none"
+      }
+    },
+    {
+      "id": "sentiment_neutral",
+      "category": "sentiment",
+      "question": "Can I exchange my shoes for a different size?",
+      "passed": true,
+      "details": {
+        "actual_flagged": false,
+        "reason": "none"
+      }
+    },
+    {
+      "id": "order_lookup_shipped",
+      "category": "order_lookup",
+      "question": "order=1002 total=80.00",
+      "passed": true,
+      "details": {
+        "actual_found": true,
+        "actual_status": "shipped",
+        "error": null
+      }
+    },
+    {
+      "id": "order_lookup_processing",
+      "category": "order_lookup",
+      "question": "order=1001 total=200.00",
+      "passed": true,
+      "details": {
+        "actual_found": true,
+        "actual_status": "processing",
+        "error": null
+      }
+    },
+    {
+      "id": "order_lookup_wrong_total",
+      "category": "order_lookup",
+      "question": "order=1002 total=999.99",
+      "passed": true,
+      "details": {
+        "actual_found": false,
+        "actual_status": null,
+        "error": "No order found matching that number and amount."
+      }
+    },
+    {
+      "id": "policy_swap_color",
+      "category": "policy_qa",
+      "question": "Is there a fee to swap for a different color?",
+      "passed": true,
+      "details": {
+        "actual_escalated": false,
+        "actual_answer": "Hi there! According to our return policy, exchanges for a different size or color are completely free of charge within our 30-day window, as long as the item is in stock. Let me know if you need help getting that started!",
+        "escalated_match": true,
+        "content_match": true
+      }
+    },
+    {
+      "id": "policy_lost_domestic_window",
+      "category": "policy_qa",
+      "question": "What if my package sat at the same tracking status for over a week?",
+      "passed": true,
+      "details": {
+        "actual_escalated": false,
+        "actual_answer": "If your domestic package shows no tracking movement for 7 or more business days, please reach out to our support team so we can open an investigation with the carrier.",
+        "escalated_match": true,
+        "content_match": true
+      }
+    },
+    {
+      "id": "policy_points_needed",
+      "category": "policy_qa",
+      "question": "How many points do I need for a $5 discount?",
+      "passed": true,
+      "details": {
+        "actual_escalated": false,
+        "actual_answer": "Hi there! You need 100 loyalty points to get $5 off a future order, according to our rewards program policy. Let me know if you need help with anything else!",
+        "escalated_match": true,
+        "content_match": true
+      }
+    },
+    {
+      "id": "policy_points_expire",
+      "category": "policy_qa",
+      "question": "Do my reward points expire?",
+      "passed": true,
+      "details": {
+        "actual_escalated": false,
+        "actual_answer": "Yes, according to our loyalty program policy, your reward points expire 12 months after they are earned.",
+        "escalated_match": true,
+        "content_match": true
+      }
+    },
+    {
+      "id": "policy_giftcard_promo",
+      "category": "policy_qa",
+      "question": "Can I use a gift card and a promo code on the same order?",
+      "passed": true,
+      "details": {
+        "actual_escalated": false,
+        "actual_answer": "Yes, according to our account and payment policy, gift cards can be combined with a promo code on the same order! Let me know if you need help with anything else.",
+        "escalated_match": true,
+        "content_match": true
+      }
+    },
+    {
+      "id": "policy_payment_failure",
+      "category": "policy_qa",
+      "question": "What happens if my payment doesn't go through?",
+      "passed": true,
+      "details": {
+        "actual_escalated": false,
+        "actual_answer": "If your payment fails after placing an order, it will be held for 24 hours so you can retry the payment before the order is automatically cancelled.",
+        "escalated_match": true,
+        "content_match": true
+      }
+    },
+    {
+      "id": "policy_data_after_deletion",
+      "category": "policy_qa",
+      "question": "Do you keep my order history after I delete my account?",
+      "passed": true,
+      "details": {
+        "actual_escalated": false,
+        "actual_answer": "Hi there! Yes, our account policy states that your order history is retained for 7 years for tax and legal record-keeping even after your account is deleted, though it will no longer be accessible to you. Let me know if you need help with anything else!",
+        "escalated_match": true,
+        "content_match": true
+      }
+    },
+    {
+      "id": "policy_cod",
+      "category": "policy_qa",
+      "question": "Is cash on delivery available?",
+      "passed": true,
+      "details": {
+        "actual_escalated": false,
+        "actual_answer": "We do not accept cash on delivery. We do, however, accept Visa, Mastercard, American Express, PayPal, Apple Pay, and Google Pay!",
+        "escalated_match": true,
+        "content_match": true
+      }
+    },
+    {
+      "id": "policy_return_window_alt_phrasing",
+      "category": "conflict_detection",
+      "question": "Within how many days must I return something to get my money back?",
+      "passed": true,
+      "details": {
+        "actual_escalated": true,
+        "actual_answer": "I found conflicting information in our policies on this - I don't want to give you the wrong answer, so I'm flagging this for a team member to confirm and get back to you.",
+        "escalated_match": true,
+        "content_match": true
+      }
+    },
+    {
+      "id": "policy_free_vs_defect_shipping",
+      "category": "policy_qa",
+      "question": "Do you charge for return shipping if you sent me the wrong size, versus if I just changed my mind?",
+      "passed": true,
+      "details": {
+        "actual_escalated": false,
+        "actual_answer": "If we sent you the wrong size, there is no return shipping cost. If you simply changed your mind, our return policy allows you to use a free prepaid label, so return shipping is free in both cases!",
+        "escalated_match": true,
+        "content_match": true
+      }
+    },
+    {
+      "id": "outofscope_human_request",
+      "category": "policy_qa",
+      "question": "Can I speak to a human right now?",
+      "passed": true,
+      "details": {
+        "actual_escalated": true,
+        "actual_answer": "I don't have a confident answer to that from our policies - I'm flagging this for a team member to follow up with you.",
+        "escalated_match": true,
+        "content_match": true
+      }
+    },
+    {
+      "id": "outofscope_store_location",
+      "category": "policy_qa",
+      "question": "Do you have a physical store in Lahore?",
+      "passed": true,
+      "details": {
+        "actual_escalated": true,
+        "actual_answer": "I don't have a confident answer to that from our policies - I'm flagging this for a team member to follow up with you.",
+        "escalated_match": true,
+        "content_match": true
+      }
+    },
+    {
+      "id": "outofscope_weather",
+      "category": "policy_qa",
+      "question": "What's the weather like today?",
+      "passed": true,
+      "details": {
+        "actual_escalated": true,
+        "actual_answer": "I don't have a confident answer to that from our policies - I'm flagging this for a team member to follow up with you.",
+        "escalated_match": true,
+        "content_match": true
+      }
+    },
+    {
+      "id": "multi_intent_return_and_shipping",
+      "category": "conflict_detection",
+      "question": "What's your return policy, and also do you ship to Canada?",
+      "passed": false,
+      "details": {
+        "actual_escalated": false,
+        "actual_answer": "Hi there! Our return policy allows you to return items due to customer preference for free using our prepaid label, and yes, we do ship to Canada.",
+        "escalated_match": false,
+        "content_match": false
+      }
+    },
+    {
+      "id": "router_order_status_normal",
+      "category": "router",
+      "question": "I placed order 1002 three days ago and it still says processing, is that normal?",
+      "passed": true,
+      "details": {
+        "actual_label": "policy",
+        "expected_label": "policy"
+      }
+    },
+    {
+      "id": "router_order_modify",
+      "category": "router",
+      "question": "I need to update my order 1002, can you help?",
+      "passed": true,
+      "details": {
+        "actual_label": "policy",
+        "expected_label": "policy"
+      }
+    },
+    {
+      "id": "router_order_not_shipped_alt",
+      "category": "router",
+      "question": "It's been 6 days and order 1001 hasn't shipped, what are my options?",
+      "passed": true,
+      "details": {
+        "actual_label": "policy",
+        "expected_label": "policy"
+      }
+    },
+    {
+      "id": "router_order_still_coming",
+      "category": "router",
+      "question": "Is my package still on its way?",
+      "passed": true,
+      "details": {
+        "actual_label": "order",
+        "expected_label": "order"
+      }
+    },
+    {
+      "id": "sentiment_borderline_frustration",
+      "category": "sentiment",
+      "question": "I've asked about this twice already and still no response, kind of frustrating.",
+      "passed": true,
+      "details": {
+        "actual_flagged": false,
+        "reason": "none"
+      }
+    },
+    {
+      "id": "sentiment_urgent_but_not_safety",
+      "category": "sentiment",
+      "question": "Please help ASAP, my card was charged twice!",
+      "passed": false,
+      "details": {
+        "actual_flagged": true,
+        "reason": "the customer is expressing urgency and a time-critical financial problem due to a double charge."
+      }
+    },
+    {
+      "id": "sentiment_safety_hazard",
+      "category": "sentiment",
+      "question": "This item literally caught fire while charging, is that normal?",
+      "passed": true,
+      "details": {
+        "actual_flagged": true,
+        "reason": "the message describes a dangerous product safety issue involving fire."
+      }
+    },
+    {
+      "id": "sentiment_review_threat",
+      "category": "sentiment",
+      "question": "I will leave a bad review if this isn't fixed.",
+      "passed": true,
+      "details": {
+        "actual_flagged": false,
+        "reason": "none"
+      }
+    },
+    {
+      "id": "sentiment_explicit_legal",
+      "category": "sentiment",
+      "question": "I'm going to sue if this isn't resolved.",
+      "passed": true,
+      "details": {
+        "actual_flagged": true,
+        "reason": "the customer is threatening legal action by mentioning a lawsuit."
+      }
+    },
+    {
+      "id": "sentiment_plain_complaint",
+      "category": "sentiment",
+      "question": "Not happy with the quality of this shirt.",
+      "passed": true,
+      "details": {
+        "actual_flagged": false,
+        "reason": "none"
+      }
+    },
+    {
+      "id": "order_lookup_nonexistent",
+      "category": "order_lookup",
+      "question": "order=9999 total=50.00",
+      "passed": true,
+      "details": {
+        "actual_found": false,
+        "actual_status": null,
+        "error": "No order found with that number."
+      }
+    },
+    {
+      "id": "order_lookup_whitespace",
+      "category": "order_lookup",
+      "question": "order= 1001  total= 200.00 ",
+      "passed": true,
+      "details": {
+        "actual_found": true,
+        "actual_status": "processing",
+        "error": null
+      }
+    },
+    {
+      "id": "order_lookup_empty_number",
+      "category": "order_lookup",
+      "question": "order= total=80.00",
+      "passed": true,
+      "details": {
+        "actual_found": false,
+        "actual_status": null,
+        "error": "No order found with that number."
+      }
+    }
+  ]
+}
