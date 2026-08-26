@@ -1,13 +1,8 @@
-# AI Support Agent — Verve Athletics (Demo)
+# AI Support Agent
 
-An AI customer support agent that answers strictly from a business's own
-policy documents, catches contradictions between those documents before
-a customer ever sees them, looks up real order status live, and knows
-when to bring in a human instead of guessing.
+An AI customer support agent for e-commerce brands and businesses. It answers from a business's real policy documents, catches contradictions between those documents before a customer ever sees them, looks up real order status from a live Shopify/WooCommerce store, and knows when to escalate to a human instead of guessing.
 
-Built as a demo/portfolio project around a fictional e-commerce brand,
-**Verve Athletics**, using a realistic policy set and a live Shopify
-development store — not toy data.
+Built for any Shopify or e-commerce store — the policy documents, order lookup credentials, and branding are all swappable per business. This repository includes one fully worked example so the system can be run and tested end-to-end out of the box: a fictional activewear brand, Verve Athletics, with its own policy set and a live demo Shopify store connected. Point it at a different store's policies and Shopify credentials, and it works the same way for them.
 
 ## Why this exists
 
