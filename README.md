@@ -21,10 +21,14 @@ credentials, and it works the same way for them.
 
 **Answering a policy question with a live order lookup:**
 ![Policy answer](Project-Images/widget_policy_answer.png)
+
+**Order lookup:**
 ![Order lookup](Project-Images/widget_order_lookup.png)
 
 **Admin analytics dashboard:**
 ![Admin analytics](Project-Images/admin_analytics.png)
+
+**Performance tab:**
 ![Performance tab](Project-Images/performance_result.png)
 
 **Escalation ticket queue:**
