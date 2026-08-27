@@ -17,21 +17,21 @@ credentials, and it works the same way for them.
 ## Screenshots
 
 **Conflict detection catching a real contradiction, live in the chat widget:**
-![Conflict detection in the widget](Project Images/widget_conflict_detected.png)
+![Conflict detection in the widget](Project-Images/widget_conflict_detected.png)
 
 **Answering a policy question with a live order lookup:**
-![Policy answer](Project Images/widget_policy_answer.png)
-![Order lookup](Project Images/widget_order_lookup.png)
+![Policy answer](Project-Images/widget_policy_answer.png)
+![Order lookup](Project-Images/widget_order_lookup.png)
 
 **Admin analytics dashboard:**
-![Admin analytics](Project Images/admin_analytics.png)
-![Performance tab](Project Images/performance_result.png)
+![Admin analytics](Project-Images/admin_analytics.png)
+![Performance tab](Project-Images/performance_result.png)
 
 **Escalation ticket queue:**
-![Escalation tickets](Project Images/admin_tickets.png)
+![Escalation tickets](Project-Images/admin_tickets.png)
 
 **Automated evaluation harness results:**
-![Evaluation summary](Project Images/evaluation_summary.png)
+![Evaluation summary](Project-Images/evaluation_summary.png)
 
 ## Why this isn't a generic chatbot wrapper
 
@@ -132,7 +132,7 @@ demo_data/                    # example policy set - swap for any client's own d
   _conflict_manifest.md       # documents the planted conflicts, for testing
 .env.example
 requirements.txt
-Project Images/                 # screenshots used in this README
+Project-Images/                 # screenshots used in this README
 ```
 
 ## Setup
