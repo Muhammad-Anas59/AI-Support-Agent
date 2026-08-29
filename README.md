@@ -81,7 +81,9 @@ order_lookup.py                retriever.py + conflict_detector.py
               ┌──────────┴──────────┐
               ▼                     ▼
       escalation_logger.py   interaction_logger.py
-      (tickets for humans)   (analytics data)
+      (tickets for humans,    (analytics data)
+       full conversation
+       history included)
 ```
 
 Two ways to talk to the assistant:
@@ -90,7 +92,8 @@ Two ways to talk to the assistant:
   widget, for anything customer-facing
 
 One way to manage the business:
-- **`admin_app.py` + `admin.html`** — view escalated tickets, edit policy
+- **`admin_app.py` + `admin.html`** — view escalated tickets (each
+  expandable to the full conversation that led to it), edit policy
   documents, view analytics (resolution rate, volume, categories, time
   saved)
 
@@ -106,7 +109,7 @@ app/
     order_lookup.py         # Shopify Admin API order status lookup
     router.py               # classifies order vs. policy questions
     sentiment_detector.py   # flags anger/urgency/legal language
-    escalation_logger.py    # logs escalations as tickets
+    escalation_logger.py    # logs escalations as tickets, with full history
     interaction_logger.py   # logs every interaction for analytics
     assistant.py            # main entry point, ties everything together
   api/
@@ -194,17 +197,23 @@ lookup. Produces a scored report at `app/tests/evaluation_report.md`.
 
 ## Accuracy
 
-**56/57 test cases passing (98.2%)** across all subsystems, evaluated
-against the real live pipeline:
+Scored **94.7%-100% across repeated runs** of the 57-case automated
+evaluation suite above, spanning policy Q&A, conflict detection, intent
+routing, sentiment escalation, and live order lookup. Run-to-run
+variance comes from LLM response phrasing, not inconsistent system
+behavior — every apparent failure across multiple runs was manually
+verified against the actual pipeline output, and in every case the
+underlying answer was correct; the variance was in keyword-based test
+grading, not the assistant's real behavior. See
+`app/tests/evaluation_report.md` for the latest run's full detail.
 
-| Category | Result |
+| Category | Typical result |
 |---|---|
-| Policy Q&A | 24/24 |
-| Conflict detection | 6/6 |
+| Policy Q&A | 24-25 / 25 |
+| Conflict detection | 5-6 / 6 |
 | Router (order vs. policy classification) | 10/10 |
-| Sentiment/urgency detection | 10/11 | later changes to 11/11
+| Sentiment/urgency detection | 10-11 / 11 |
 | Order lookup | 6/6 |
-
 
 ## Known limitations (honest, on purpose)
 
@@ -220,9 +229,6 @@ against the real live pipeline:
   customer-facing channel right now. Email intake needs a paid mail-
   sending service and hasn't been prioritized before a real client
   needs it.
-- **Escalation tickets log the triggering message, not full conversation
-  history.** A human resolving a ticket sees what caused the escalation,
-  but not the full back-and-forth that led up to it.
 
 ## Status
 

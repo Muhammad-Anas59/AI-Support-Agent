@@ -25,6 +25,16 @@ from escalation_logger import log_escalation
 from interaction_logger import log_interaction
 
 
+def reset_flow_state(conversation_state):
+    """Clears order-flow-specific fields (awaiting, order_number) WITHOUT
+    touching the persistent conversation history - history should survive
+    for the whole session even after an order lookup completes and its
+    flow-specific fields get reset, since a human resolving an escalation
+    later in the same session still needs the full back-and-forth."""
+    conversation_state.pop("awaiting", None)
+    conversation_state.pop("order_number", None)
+
+
 def handle_order_question(question, conversation_state):
     """Handles an order-status question. If order number or total is
     missing, asks a follow-up instead of guessing or escalating - this
@@ -52,7 +62,7 @@ def handle_order_question(question, conversation_state):
     if awaiting == "order_number":
         order_number = parse_order_number(question)
         if not order_number:
-            conversation_state.clear()
+            reset_flow_state(conversation_state)
             return {
                 "answer": "I couldn't find an order number in that - no worries, what else can I help with?",
                 "escalated": False,
@@ -69,7 +79,7 @@ def handle_order_question(question, conversation_state):
     if awaiting == "total":
         total = parse_amount(question)
         if not total:
-            conversation_state.clear()
+            reset_flow_state(conversation_state)
             return {
                 "answer": "I couldn't find an amount in that - no worries, what else can I help with?",
                 "escalated": False,
@@ -99,13 +109,14 @@ def handle_order_question(question, conversation_state):
             }
 
     result = find_order(order_number, total)
-    conversation_state.clear()  # verification done, reset for next question
+    reset_flow_state(conversation_state)  # verification done, reset flow fields (history preserved)
 
     if not result["found"]:
         log_escalation(
             customer_message=question,
             reason="Order lookup failed - no match found for provided order number and total",
-            category="order_not_found"
+            category="order_not_found",
+            conversation_state=conversation_state
         )
         log_interaction(question, handler="order", resolved=False, category="order_not_found")
         return {
@@ -129,7 +140,7 @@ def handle_order_question(question, conversation_state):
     }
 
 
-def handle_policy_question(question, index, chunks):
+def handle_policy_question(question, index, chunks, conversation_state):
     """Handles a general policy question via the existing RAG pipeline."""
     result = answer_question(question, index, chunks)
 
@@ -154,7 +165,8 @@ def handle_policy_question(question, index, chunks):
         log_escalation(
             customer_message=question,
             reason=reason,
-            category=category
+            category=category,
+            conversation_state=conversation_state
         )
         log_interaction(question, handler="policy", resolved=False,
                          confidence=result.get("confidence"), category=category)
@@ -176,9 +188,25 @@ def handle_policy_question(question, index, chunks):
 
 
 def get_response(question, conversation_state, index, chunks):
-    """Main function: classifies the question, then routes it to the
-    right handler. conversation_state persists across turns so follow-up
-    answers (like 'my order number is 1001') are understood in context."""
+    """Public entry point: runs the real routing logic, then always
+    appends this turn to a persistent conversation history before
+    returning - regardless of which internal path handled the question.
+    Wrapping it this way means history capture can't be forgotten or
+    skipped by any individual handler, and doesn't require threading
+    extra bookkeeping through every branch of the routing logic below."""
+    response = _get_response_inner(question, conversation_state, index, chunks)
+
+    history = conversation_state.setdefault("history", [])
+    history.append({"customer": question, "assistant": response.get("answer")})
+
+    return response
+
+
+def _get_response_inner(question, conversation_state, index, chunks):
+    """Classifies the question, then routes it to the right handler.
+    conversation_state persists across turns so follow-up answers (like
+    'my order number is 1001') are understood in context, and so a full
+    conversation history is available if this session later escalates."""
 
     # If we're mid-way through collecting order details, treat this
     # message as answering that, not as a brand new question to classify
@@ -194,7 +222,8 @@ def get_response(question, conversation_state, index, chunks):
         log_escalation(
             customer_message=question,
             reason=reason,
-            category="sentiment_urgency"
+            category="sentiment_urgency",
+            conversation_state=conversation_state
         )
         log_interaction(question, handler="sentiment_block", resolved=False, category="sentiment_urgency")
         return {
@@ -209,7 +238,7 @@ def get_response(question, conversation_state, index, chunks):
     if label == "order":
         return handle_order_question(question, conversation_state)
     else:
-        return handle_policy_question(question, index, chunks)
+        return handle_policy_question(question, index, chunks, conversation_state)
 
 
 if __name__ == "__main__":
