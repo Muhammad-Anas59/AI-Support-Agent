@@ -31,6 +31,10 @@ from assistant import get_response
 from retriever import load_index
 
 app = Flask(__name__)
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+
+limiter = Limiter(app=app, key_func=get_remote_address, default_limits=["30 per minute"])
 CORS(app)  # allow the widget to call this API from any page/origin during demo/dev
 
 print("Loading RAG index...")
@@ -41,7 +45,8 @@ print(f"Loaded {len(chunks)} chunks. Chat API ready.")
 # Lost on server restart - acceptable for a demo, not for production.
 sessions = {}
 
-
+@limiter.limit("10 per minute")
+@app.route("/api/chat", methods=["POST"])
 @app.route("/api/chat", methods=["POST"])
 def api_chat():
     """Main chat endpoint. Expects JSON: {"message": "...", "session_id": "..."}.

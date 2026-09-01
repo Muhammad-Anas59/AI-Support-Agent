@@ -1,5 +1,8 @@
 # AI Support Agent
 
+**Live demo:** [verve-support.duckdns.org/storefront.html](https://verve-support.duckdns.org/storefront.html) — try the chat widget directly.
+**Admin console:** [verve-support.duckdns.org](https://verve-support.duckdns.org) (login required — request demo credentials)
+
 An AI customer support agent for e-commerce brands. It answers from a
 business's real policy documents, catches contradictions between those
 documents before a customer ever sees them, looks up real order status
@@ -10,8 +13,8 @@ Built for any Shopify or e-commerce store — the policy documents, order
 lookup credentials, and branding are all swappable per business. This
 repository includes one fully worked example so the system can be run
 and tested end-to-end out of the box: a fictional activewear brand,
-**Verve Athletics**, with its own policy set and a live demo Shopify
-store connected. Point it at a different store's policies and Shopify
+**Verve Athletics**, with its own policy set and a live Shopify store
+connected. Point it at a different store's policies and Shopify
 credentials, and it works the same way for them.
 
 ## Screenshots
@@ -98,7 +101,21 @@ One way to manage the business:
 - **`admin_app.py` + `admin.html`** — view escalated tickets (each
   expandable to the full conversation that led to it), edit policy
   documents, view analytics (resolution rate, volume, categories, time
-  saved)
+  saved). Protected behind a branded login page with session-based
+  authentication.
+
+## Security
+
+- **Admin console requires login.** Session-based authentication with a
+  branded login page (`login.html`), secure/HTTP-only session cookies,
+  and an 8-hour session expiry.
+- **Rate limiting** on the customer-facing chat endpoint (`/api/chat`)
+  to prevent abuse and protect API quota.
+- **HTTPS everywhere**, via a free Let's Encrypt certificate with
+  automatic renewal (nginx + certbot), reverse-proxied in front of both
+  Flask services.
+- **Server access restricted** — SSH limited to a specific IP, all
+  other inbound traffic scoped to only the ports actually in use.
 
 ## Project structure
 
@@ -116,30 +133,31 @@ app/
     interaction_logger.py   # logs every interaction for analytics
     assistant.py            # main entry point, ties everything together
   api/
-    admin_app.py            # Flask backend for the admin dashboard
-    chat_api.py              # Flask backend for the customer chat widget
+    admin_app.py            # Flask backend for the admin dashboard (login-protected)
+    chat_api.py              # Flask backend for the customer chat widget (rate-limited)
     static/
       admin.html
+      login.html              # branded admin login page
       widget.js
-      demo_page.html         # test page with the widget embedded
+      storefront.html          # example storefront with the widget embedded
   data/
     policy_index.faiss       # generated - not committed
     chunks_metadata.json     # generated - not committed
     escalation_tickets.jsonl # generated - not committed
     interactions.jsonl       # generated - not committed
   tests/
-    eval_cases.json          # 57 labeled test cases across all subsystems
+    eval_cases.json          # labeled test cases across all subsystems
     evaluation_harness.py    # runs every case against the real live pipeline
     evaluation_report.md     # generated - latest scored results
-demo_data/                    # example policy set - swap for any client's own docs
+policy_docs/                   # example policy set - swap for any client's own docs
   00_brand_info.txt
   01_shipping_policy.txt
   02_returns_policy.txt
-  03_website_faq.txt          # deliberately drifted, contains planted conflicts
+  03_website_faq.txt          # deliberately drifted, contains a planted conflict
   04_warranty_policy.txt
   05_cancellation_policy.txt
   06_account_payment_policy.txt
-  _conflict_manifest.md       # documents the planted conflicts, for testing
+  _conflict_manifest.md       # documents the planted conflict, for testing
 .env.example
 requirements.txt
 Project-Images/                 # screenshots used in this README
@@ -150,7 +168,6 @@ Project-Images/                 # screenshots used in this README
 **1. Install dependencies**
 ```bash
 pip install -r requirements.txt
-pip install flask-cors
 ```
 
 **2. Configure environment variables**
@@ -160,13 +177,16 @@ Copy `.env.example` to `.env` and fill in:
 GEMINI_API_KEY=your_gemini_api_key
 SHOPIFY_STORE_DOMAIN=your-store.myshopify.com
 SHOPIFY_ACCESS_TOKEN=shpat_your_admin_api_token
+ADMIN_USERNAME=your_chosen_admin_username
+ADMIN_PASSWORD=your_chosen_admin_password
+FLASK_SECRET_KEY=a_long_random_string
 ```
 
 **3. Build the retrieval index**
 ```bash
-python app/core/embedder.py
+python -m app.core.embedder
 ```
-This reads `demo_data/`, chunks it, embeds every chunk, and saves the
+This reads `policy_docs/`, chunks it, embeds every chunk, and saves the
 FAISS index + metadata to `app/data/`. Re-run this any time a policy
 document changes.
 
@@ -174,60 +194,49 @@ document changes.
 
 **Terminal chat (fastest way to test):**
 ```bash
-python app/core/assistant.py
+python -m app.core.assistant
 ```
 
 **Customer-facing web chat widget:**
 ```bash
-python app/api/chat_api.py
+python -m app.api.chat_api
 ```
-Then open `app/api/static/demo_page.html` directly in a browser.
+Then open `app/api/static/storefront.html` directly in a browser, or
+visit the live version at the link above.
 
 **Admin dashboard:**
 ```bash
-python app/api/admin_app.py
+python -m app.api.admin_app
 ```
-Then visit `http://localhost:5000`.
+Then visit `http://localhost:5000` and log in with your `ADMIN_USERNAME`
+/ `ADMIN_PASSWORD`.
 
 **Run the evaluation suite:**
 ```bash
-python app/tests/evaluation_harness.py
+python -m app.tests.evaluation_harness
 ```
-Runs 57 labeled test cases against the real, live pipeline — not
+Runs the labeled test cases against the real, live pipeline — not
 mocked — covering policy Q&A, conflict detection, out-of-scope
 handling, order-vs-policy routing, sentiment detection, and order
 lookup. Produces a scored report at `app/tests/evaluation_report.md`.
 
 ## Accuracy
 
-Scored **94.7%-100% across repeated runs** of the 57-case automated
-evaluation suite above, spanning policy Q&A, conflict detection, intent
-routing, sentiment escalation, and live order lookup. Run-to-run
-variance comes from LLM response phrasing, not inconsistent system
-behavior — every apparent failure across multiple runs was manually
-verified against the actual pipeline output, and in every case the
-underlying answer was correct; the variance was in keyword-based test
-grading, not the assistant's real behavior. See
-`app/tests/evaluation_report.md` for the latest run's full detail.
-
-| Category | Typical result |
-|---|---|
-| Policy Q&A | 24-25 / 25 |
-| Conflict detection | 5-6 / 6 |
-| Router (order vs. policy classification) | 10/10 |
-| Sentiment/urgency detection | 10-11 / 11 |
-| Order lookup | 6/6 |
+See `app/tests/evaluation_report.md` for the latest run's full detail,
+including per-category breakdowns and any failing cases with their
+actual output. The suite is run against the real, live pipeline (not
+mocked) on every significant change.
 
 ## Known limitations (honest, on purpose)
 
 - **Order verification uses order number + total, not order number +
   email.** Shopify blocks API access to customer PII (name, email,
-  phone, address) unless the store is on a paid plan — the demo store
-  used here is free-tier. This is a demo-environment limitation, not a
-  product one: a real client's store is on a paid plan by definition, so
-  proper email verification works out of the box with zero code changes
-  once deployed against a real client's store. See the docstring in
-  `order_lookup.py` for details.
+  phone, address) unless the store is on a paid plan — the example
+  store used here is free-tier. This is a demo-environment limitation,
+  not a product one: a real client's store is on a paid plan by
+  definition, so proper email verification works out of the box with
+  zero code changes once deployed against a real client's store. See
+  the docstring in `order_lookup.py` for details.
 - **Email intake isn't built.** Only the web chat widget exists as a
   customer-facing channel right now. Email intake needs a paid mail-
   sending service and hasn't been prioritized before a real client
@@ -235,12 +244,13 @@ grading, not the assistant's real behavior. See
 
 ## Status
 
-Core pipeline (retrieval, conflict detection, order lookup, routing,
-sentiment escalation, admin dashboard, analytics, customer chat widget)
-is built and tested against a manifest of planted policy conflicts, a
-broad sweep of general questions, and a 57-case automated evaluation
-suite, using the included Verve Athletics example dataset and demo
-Shopify store. Not yet deployed publicly — running locally only as of
-this writing. Adapting this to a new business means swapping the
-contents of `demo_data/`, re-running `embedder.py`, and connecting that
-business's own Shopify credentials in `.env` — no code changes required.
+Deployed and live (see link at the top of this README) on AWS EC2,
+behind nginx with HTTPS. Core pipeline (retrieval, conflict detection,
+order lookup, routing, sentiment escalation, admin dashboard with
+authentication, analytics, customer chat widget, rate limiting) is
+built and tested against a manifest of planted policy conflicts, a
+broad sweep of general questions, and an automated evaluation suite,
+using the included Verve Athletics example dataset and Shopify store.
+Adapting this to a new business means swapping the contents of
+`policy_docs/`, re-running `embedder.py`, and connecting that
+business's own Shopify credentials.

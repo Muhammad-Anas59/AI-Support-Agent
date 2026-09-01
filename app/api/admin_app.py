@@ -1,10 +1,12 @@
+
+
 """
 admin_app.py
 
 Job: A small Flask backend serving two things to the admin interface:
 1. Escalated tickets (from escalation_logger.py) - so a human can see
    what needs attention and why.
-2. Policy documents (from demo_data/) - so a business owner can view,
+2. Policy documents (from policy_docs/) - so a business owner can view,
    add, or edit their own policies without touching code.
 
 This is intentionally simple (file-based, no database) since it matches
@@ -14,7 +16,7 @@ contained change, not a rewrite.
 
 import os
 import sys
-from flask import Flask, jsonify, request, send_from_directory
+from flask import Flask, jsonify, request, send_from_directory, Response, session
 
 sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "core"))
@@ -23,8 +25,37 @@ from escalation_logger import get_all_tickets, get_ticket_summary
 from interaction_logger import get_analytics_summary
 
 app = Flask(__name__, static_folder="static", static_url_path="")
+app.secret_key = os.getenv("FLASK_SECRET_KEY")
+app.config["SESSION_COOKIE_SECURE"] = True
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+app.config["PERMANENT_SESSION_LIFETIME"] = 28800
+ADMIN_USERNAME = os.getenv("ADMIN_USERNAME")
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
 
-POLICY_FOLDER = os.path.join(os.path.dirname(__file__), "..", "..", "demo_data")
+@app.before_request
+def require_login():
+    if request.path in ("/login", "/login.html") or request.path.startswith("/static"):
+        return
+    if not session.get("logged_in"):
+        if request.path.startswith("/api/"):
+            return jsonify({"error": "unauthorized"}), 401
+        return send_from_directory(app.static_folder, "login.html")
+
+@app.route("/login", methods=["POST"])
+def login():
+    data = request.get_json()
+    if data.get("username") == ADMIN_USERNAME and data.get("password") == ADMIN_PASSWORD:
+        session["logged_in"] = True
+        session.permanent = True
+        return jsonify({"ok": True})
+    return jsonify({"ok": False}), 401
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return send_from_directory(app.static_folder, "login.html")
+
+POLICY_FOLDER = os.path.join(os.path.dirname(__file__), "..", "..", "policy_docs")
 
 
 @app.route("/")
@@ -88,4 +119,4 @@ def api_update_policy(filename):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+	app.run(host="0.0.0.0", debug=True, port=5000)

@@ -1,7 +1,7 @@
 """
 document_loader.py
 
-Job: Read every policy .txt file from demo_data/, and split each one into
+Job: Read every policy .txt file from policy_docs/, and split each one into
 small chunks (not whole documents). We chunk because embeddings work
 better on focused pieces of text, not entire multi-topic documents.
 
@@ -104,8 +104,8 @@ def load_and_chunk_all(folder_path):
 
 if __name__ == "__main__":
     # Quick manual test: run this file directly to see chunks printed
-    chunks = load_and_chunk_all("../../demo_data")
-    print(f"Loaded {len(chunks)} chunks from demo_data/")
+    chunks = load_and_chunk_all("../../policy_docs")
+    print(f"Loaded {len(chunks)} chunks from policy_docs/")
     for c in chunks:
         if c["source"] in ("02_returns_policy.txt", "03_website_faq.txt"):
             print(f"\n[{c['source']} #{c['chunk_id']}] ({len(c['text'])} chars)")
