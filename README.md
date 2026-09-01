@@ -16,6 +16,9 @@ credentials, and it works the same way for them.
 
 ## Screenshots
 
+**Admin login:**
+![Admin login](Project-Images/admin_login.png)
+
 **Conflict detection catching a real contradiction, live in the chat widget:**
 ![Conflict detection in the widget](Project-Images/widget_conflict_detected.png)
 
