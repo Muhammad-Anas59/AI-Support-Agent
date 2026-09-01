@@ -1,9 +1,13 @@
 # Planted Conflicts (for testing conflict detection accuracy)
 
-These are GENUINE, unambiguous contradictions between `02_returns_policy.txt` (official)
+NOTE: Conflicts #1-3 (return window, refund time, sale items) were resolved in the FAQ
+as of August 2026. Conflict #4 (order cancellation window) was planted to replace them
+for ongoing conflict-detection testing.
+
+These are GENUINE, unambiguous contradictions between official policy documents
 and `03_website_faq.txt` (live site copy that drifted out of date). Use this list to
-check precision/recall once conflict detection is built — it should catch all 3
-and should NOT flag anything else as a false positive.
+check precision/recall once conflict detection is built — it should catch conflict #4
+(the only currently active one) and should NOT flag anything else as a false positive.
 
 1. **Return window**
    - Official: 30 days from delivery
@@ -20,6 +24,10 @@ and should NOT flag anything else as a false positive.
    - FAQ: "Final sale, cannot be returned or exchanged" (no exception mentioned)
    - → Genuine conflict, contradicts on eligibility itself.
 
+4. **Order cancellation window**
+   - Official: 1 hour from order placement
+   - FAQ: 24 hours from order placement
+   - → Genuine conflict, same policy, different numbers.
 ## Non-conflicts to check the system does NOT flag
 - Shipping free-over-$75 threshold appears identically in both `01_shipping_policy.txt`
   and `03_website_faq.txt` — should NOT be flagged (they agree).

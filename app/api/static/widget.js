@@ -12,7 +12,7 @@
  */
 
 (function () {
-  const API_BASE = window.VERVE_CHAT_API || "http://localhost:5001";
+  const API_BASE = window.VERVE_CHAT_API || "https://verve-support.duckdns.org";
   const SESSION_KEY = "verve_chat_session_id";
 
   function getSessionId() {
@@ -291,6 +291,7 @@
       typingEl.remove();
       addMessage(messagesEl, data.answer, "bot", data.escalated);
     } catch (err) {
+      console.error("Chat fetch error:", err);
       typingEl.remove();
       addMessage(messagesEl, "Sorry, I couldn't reach support right now - please try again in a moment.", "bot", true);
     }

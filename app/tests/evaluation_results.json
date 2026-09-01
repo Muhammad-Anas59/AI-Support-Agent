@@ -1,17 +1,17 @@
 {
   "summary": {
-    "total": 57,
-    "passed": 57,
-    "failed": 0,
-    "overall_accuracy": 100.0,
+    "total": 59,
+    "passed": 53,
+    "failed": 6,
+    "overall_accuracy": 89.8,
     "by_category": {
       "policy_qa": {
-        "total": 25,
-        "passed": 25
+        "total": 28,
+        "passed": 26
       },
       "conflict_detection": {
-        "total": 5,
-        "passed": 5
+        "total": 4,
+        "passed": 3
       },
       "router": {
         "total": 10,
@@ -23,15 +23,15 @@
       },
       "order_lookup": {
         "total": 6,
-        "passed": 6
+        "passed": 3
       }
     },
     "category_accuracy": {
-      "policy_qa": 100.0,
-      "conflict_detection": 100.0,
+      "policy_qa": 92.9,
+      "conflict_detection": 75.0,
       "router": 100.0,
       "sentiment": 100.0,
-      "order_lookup": 100.0
+      "order_lookup": 50.0
     }
   },
   "results": [
@@ -42,7 +42,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "Our standard domestic shipping takes 5 to 7 business days.",
+        "actual_answer": "Our domestic standard shipping takes 5-7 business days.",
         "escalated_match": true,
         "content_match": true
       }
@@ -54,7 +54,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "Our international shipping options include Standard International, which takes 10 to 15 business days, and Express International, which takes 5 to 7 business days. Let me know if you need help with anything else!",
+        "actual_answer": "According to our shipping policy, Standard International shipping takes 10 to 15 business days, and Express International shipping takes 5 to 7 business days. Let me know if you need help with anything else!",
         "escalated_match": true,
         "content_match": true
       }
@@ -66,7 +66,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "If your domestic package shows no tracking movement for 7 or more business days, you can contact support to start an investigation with the carrier. Per our shipping policy, we do not issue refunds for delayed packages until the carrier officially confirms them as lost, which is typically after 21 days for domestic orders.",
+        "actual_answer": "If your domestic package shows no tracking movement for 7 or more business days, our shipping policy states you can contact support to start a carrier investigation. Please note that we cannot issue a refund for delayed packages until the carrier officially confirms the package as lost, which is typically after 21 days for domestic orders.",
         "escalated_match": true,
         "content_match": true
       }
@@ -78,7 +78,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "Yes, all of our footwear comes with a 6-month manufacturer warranty covering defects like sole separation, stitching failure, and zipper malfunction.",
+        "actual_answer": "Yes, according to our warranty policy, all footwear comes with a 6-month warranty covering manufacturing defects like sole separation, stitching failure, or zipper malfunction.",
         "escalated_match": true,
         "content_match": true
       }
@@ -90,7 +90,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "According to our warranty policy, apparel comes with a 3-month warranty against fabric defects like seam tearing or print peeling.",
+        "actual_answer": "According to our warranty policy, apparel comes with a 3-month warranty that covers fabric defects like seam tearing or print peeling.",
         "escalated_match": true,
         "content_match": true
       }
@@ -99,12 +99,12 @@
       "id": "policy_cancellation_window",
       "category": "policy_qa",
       "question": "Can I cancel my order after placing it?",
-      "passed": true,
+      "passed": false,
       "details": {
-        "actual_escalated": false,
-        "actual_answer": "Yes, our cancellation policy allows you to cancel your order free of charge within 1 hour of placing it, as long as it hasn't entered the fulfillment process yet. After that 1-hour window, orders typically cannot be cancelled because fulfillment begins automatically.",
-        "escalated_match": true,
-        "content_match": true
+        "actual_escalated": true,
+        "actual_answer": "I found conflicting information in our policies on this - I don't want to give you the wrong answer, so I'm flagging this for a team member to confirm and get back to you.",
+        "escalated_match": false,
+        "content_match": false
       }
     },
     {
@@ -114,7 +114,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "We accept Visa, Mastercard, American Express, PayPal, Apple Pay, and Google Pay, though we do not accept cash on delivery or bank transfers.",
+        "actual_answer": "Hi there! We accept Visa, Mastercard, American Express, PayPal, Apple Pay, and Google Pay for your orders. Let me know if you need help with anything else!",
         "escalated_match": true,
         "content_match": true
       }
@@ -126,7 +126,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "Hi there! Under our Verve Rewards program, you earn 1 point for every $1 you spend, and every 100 points gets you $5 off a future order. Just keep in mind that those points expire 12 months after they're earned, and they are credited to your account 7 days after delivery.",
+        "actual_answer": "Hi there! Under our Verve Rewards program, you earn 1 point for every $1 you spend, and every 100 points gets you $5 off a future order. Just keep in mind that your points are credited 7 days after delivery and expire 12 months after they are earned. Let me know if you need help with anything else!",
         "escalated_match": true,
         "content_match": true
       }
@@ -138,7 +138,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "If you received the wrong item or our team made a mistake, our return policy states that there is no return shipping cost, and you can also request expedited replacement shipping at no charge.",
+        "actual_answer": "If you received the wrong item, our return policy states that there is no return shipping cost, and you may also request expedited replacement shipping at no charge.",
         "escalated_match": true,
         "content_match": true
       }
@@ -147,22 +147,22 @@
       "id": "policy_address_change",
       "category": "policy_qa",
       "question": "Can I change my shipping address?",
-      "passed": true,
+      "passed": false,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "Hi there! Yes, you can request a change to your shipping address, but our cancellation and modification policy states this must be done within the same 1-hour window of placing your order. Please reach out to support immediately so we can do our best to catch it before fulfillment starts!",
+        "actual_answer": "Hi there! According to our cancellation and shipping policies, you can request a change to your shipping address within the first hour of placing your order. If your order hasn't shipped yet and you caught an error, please reach out to support immediately so we can try to correct it for you!",
         "escalated_match": true,
-        "content_match": true
+        "content_match": false
       }
     },
     {
       "id": "conflict_return_window",
-      "category": "conflict_detection",
+      "category": "policy_qa",
       "question": "How long do I have to return an item?",
       "passed": true,
       "details": {
-        "actual_escalated": true,
-        "actual_answer": "I found conflicting information in our policies on this - I don't want to give you the wrong answer, so I'm flagging this for a team member to confirm and get back to you.",
+        "actual_escalated": false,
+        "actual_answer": "You have 30 days from the date you receive your order to return an item for a refund or exchange, as long as it's unworn and still has the original tags attached.",
         "escalated_match": true,
         "content_match": true
       }
@@ -171,22 +171,22 @@
       "id": "conflict_refund_time",
       "category": "conflict_detection",
       "question": "How long does a refund take?",
-      "passed": true,
+      "passed": false,
       "details": {
-        "actual_escalated": true,
-        "actual_answer": "I found conflicting information in our policies on this - I don't want to give you the wrong answer, so I'm flagging this for a team member to confirm and get back to you.",
-        "escalated_match": true,
-        "content_match": true
+        "actual_escalated": false,
+        "actual_answer": "According to our return policy, refunds are typically processed within 5 to 7 business days after we receive your returned item, while store credit refunds are processed within 1 to 2 business days.",
+        "escalated_match": false,
+        "content_match": false
       }
     },
     {
       "id": "conflict_sale_items",
-      "category": "conflict_detection",
+      "category": "policy_qa",
       "question": "Can I return a sale item?",
       "passed": true,
       "details": {
-        "actual_escalated": true,
-        "actual_answer": "I found conflicting information in our policies on this - I don't want to give you the wrong answer, so I'm flagging this for a team member to confirm and get back to you.",
+        "actual_escalated": false,
+        "actual_answer": "Yes, you can return a sale item! According to our return policy, items purchased during a sale (30% off or more) are eligible for store credit only, unless the item is defective.",
         "escalated_match": true,
         "content_match": true
       }
@@ -304,7 +304,7 @@
       "passed": true,
       "details": {
         "actual_flagged": true,
-        "reason": "the customer is reporting an allergic reaction and a medical symptom causing physical pain."
+        "reason": "the customer reports a medical reaction and safety concern due to an allergic reaction."
       }
     },
     {
@@ -314,7 +314,7 @@
       "passed": true,
       "details": {
         "actual_flagged": true,
-        "reason": "the customer expresses genuine anger and frustration about repeated unresolved errors."
+        "reason": "the customer expresses genuine anger and frustration over repeated order errors and lack of help."
       }
     },
     {
@@ -341,22 +341,22 @@
       "id": "order_lookup_shipped",
       "category": "order_lookup",
       "question": "order=1002 total=80.00",
-      "passed": true,
+      "passed": false,
       "details": {
-        "actual_found": true,
-        "actual_status": "shipped",
-        "error": null
+        "actual_found": false,
+        "actual_status": null,
+        "error": "Shopify API request failed: 401 Client Error: Unauthorized for url: https://verve-athletics-demo.myshopify.com/admin/api/2025-01/orders.json?name=%231002&status=any"
       }
     },
     {
       "id": "order_lookup_processing",
       "category": "order_lookup",
       "question": "order=1001 total=200.00",
-      "passed": true,
+      "passed": false,
       "details": {
-        "actual_found": true,
-        "actual_status": "processing",
-        "error": null
+        "actual_found": false,
+        "actual_status": null,
+        "error": "Shopify API request failed: 401 Client Error: Unauthorized for url: https://verve-athletics-demo.myshopify.com/admin/api/2025-01/orders.json?name=%231001&status=any"
       }
     },
     {
@@ -367,7 +367,7 @@
       "details": {
         "actual_found": false,
         "actual_status": null,
-        "error": "No order found matching that number and amount."
+        "error": "Shopify API request failed: 401 Client Error: Unauthorized for url: https://verve-athletics-demo.myshopify.com/admin/api/2025-01/orders.json?name=%231002&status=any"
       }
     },
     {
@@ -377,7 +377,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "Hi there! Our return and exchange policy allows you to swap an item for a different color completely free of charge within our 30-day window, as long as the item is in stock. Let me know if you need help getting started with your exchange!",
+        "actual_answer": "Hi there! Exchanges for a different color are completely free of charge within our 30-day return window, as long as the item is in stock.",
         "escalated_match": true,
         "content_match": true
       }
@@ -389,7 +389,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "If your domestic package shows no tracking movement for 7 or more business days, please reach out to our support team so we can start an investigation with the carrier!",
+        "actual_answer": "If your domestic package shows no tracking movement for 7 or more business days, please reach out to our support team so we can open an investigation with the carrier.",
         "escalated_match": true,
         "content_match": true
       }
@@ -401,7 +401,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "Hi there! According to our loyalty program policy, you need 100 points for a $5 discount on a future order. Let me know if you need help with anything else!",
+        "actual_answer": "Hi there! You need 100 loyalty points to get $5 off a future order, according to our rewards program policy. Let me know if you need help with anything else!",
         "escalated_match": true,
         "content_match": true
       }
@@ -413,7 +413,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "Hi there! Yes, according to our loyalty policy, your reward points expire 12 months after they are earned. Let me know if you need help with anything else!",
+        "actual_answer": "Hi there! Yes, our Verve Rewards points expire 12 months after they are earned. Let me know if you need help with anything else!",
         "escalated_match": true,
         "content_match": true
       }
@@ -437,7 +437,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "If your payment fails, our account and payment policy notes that the order will be held for 24 hours so you can retry the payment before it is automatically cancelled.",
+        "actual_answer": "If your payment fails after placing your order, it will be held for 24 hours so you have a chance to retry the payment before the order is automatically cancelled.",
         "escalated_match": true,
         "content_match": true
       }
@@ -449,7 +449,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "Yes, per our account policy, your order history is retained for 7 years after account deletion for tax and legal record-keeping, though it will no longer be accessible to you.",
+        "actual_answer": "Yes, our account policy notes that your order history is retained for 7 years for tax and legal record-keeping even after your account is deleted, though it will no longer be accessible to you.",
         "escalated_match": true,
         "content_match": true
       }
@@ -461,19 +461,19 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "We do not accept cash on delivery. We do, however, accept Visa, Mastercard, American Express, PayPal, Apple Pay, and Google Pay!",
+        "actual_answer": "Hi there! We do not accept cash on delivery, but we do accept Visa, Mastercard, American Express, PayPal, Apple Pay, and Google Pay. Let me know if you need help with anything else!",
         "escalated_match": true,
         "content_match": true
       }
     },
     {
       "id": "policy_return_window_alt_phrasing",
-      "category": "conflict_detection",
+      "category": "policy_qa",
       "question": "Within how many days must I return something to get my money back?",
       "passed": true,
       "details": {
-        "actual_escalated": true,
-        "actual_answer": "I found conflicting information in our policies on this - I don't want to give you the wrong answer, so I'm flagging this for a team member to confirm and get back to you.",
+        "actual_escalated": false,
+        "actual_answer": "Hi there! According to our return policy, you have 30 days from the date you receive your order to return an item for a refund. Let us know if you need any help getting that started!",
         "escalated_match": true,
         "content_match": true
       }
@@ -485,7 +485,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "There is no return shipping cost if we sent you the wrong size or made a mistake on our end. Additionally, according to our return policy, returns due to customer preference like changing your mind are also free when using our prepaid label.",
+        "actual_answer": "If we sent you the wrong size, there is no return shipping cost. If you simply changed your mind, return shipping is also free when you use our prepaid label!",
         "escalated_match": true,
         "content_match": true
       }
@@ -533,7 +533,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "Hi there! I'd be happy to help with that. Our return policy allows you to easily start a return through the \"My Orders\" page on our website or by emailing our support team, and returns due to customer preference are free with our prepaid label for domestic orders. Yes, we do ship to Canada!",
+        "actual_answer": "Hi there! Our return policy allows you to return items due to customer preference for free using our prepaid label, and you can start a return through the \"My Orders\" page on our website or by emailing support. I'm also happy to let you know that we do ship to Canada!",
         "escalated_match": true,
         "content_match": true
       }
@@ -595,7 +595,7 @@
       "passed": true,
       "details": {
         "actual_flagged": true,
-        "reason": "the message indicates a time-critical financial problem with a sense of urgency."
+        "reason": "the message indicates a time-critical financial problem involving unexpected duplicate charges that requires immediate attention."
       }
     },
     {
@@ -605,7 +605,7 @@
       "passed": true,
       "details": {
         "actual_flagged": true,
-        "reason": "the message describes a safety issue involving a product catching fire, which indicates real harm and urgency."
+        "reason": "the message describes a dangerous safety issue involving a product catching fire."
       }
     },
     {
@@ -639,6 +639,30 @@
       }
     },
     {
+      "id": "conflict_cancellation_window",
+      "category": "conflict_detection",
+      "question": "How long do I have to cancel my order?",
+      "passed": true,
+      "details": {
+        "actual_escalated": true,
+        "actual_answer": "I found conflicting information in our policies on this - I don't want to give you the wrong answer, so I'm flagging this for a team member to confirm and get back to you.",
+        "escalated_match": true,
+        "content_match": true
+      }
+    },
+    {
+      "id": "conflict_cancellation_alt_phrasing",
+      "category": "conflict_detection",
+      "question": "Can I cancel my order 5 hours after placing it?",
+      "passed": true,
+      "details": {
+        "actual_escalated": true,
+        "actual_answer": "I found conflicting information in our policies on this - I don't want to give you the wrong answer, so I'm flagging this for a team member to confirm and get back to you.",
+        "escalated_match": true,
+        "content_match": true
+      }
+    },
+    {
       "id": "order_lookup_nonexistent",
       "category": "order_lookup",
       "question": "order=9999 total=50.00",
@@ -646,18 +670,18 @@
       "details": {
         "actual_found": false,
         "actual_status": null,
-        "error": "No order found with that number."
+        "error": "Shopify API request failed: 401 Client Error: Unauthorized for url: https://verve-athletics-demo.myshopify.com/admin/api/2025-01/orders.json?name=%239999&status=any"
       }
     },
     {
       "id": "order_lookup_whitespace",
       "category": "order_lookup",
       "question": "order= 1001  total= 200.00 ",
-      "passed": true,
+      "passed": false,
       "details": {
-        "actual_found": true,
-        "actual_status": "processing",
-        "error": null
+        "actual_found": false,
+        "actual_status": null,
+        "error": "Shopify API request failed: 401 Client Error: Unauthorized for url: https://verve-athletics-demo.myshopify.com/admin/api/2025-01/orders.json?name=%231001&status=any"
       }
     },
     {
@@ -668,7 +692,7 @@
       "details": {
         "actual_found": false,
         "actual_status": null,
-        "error": "No order found with that number."
+        "error": "Shopify API request failed: 401 Client Error: Unauthorized for url: https://verve-athletics-demo.myshopify.com/admin/api/2025-01/orders.json?name=%23&status=any"
       }
     }
   ]

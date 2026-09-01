@@ -70,6 +70,6 @@ if __name__ == "__main__":
     sys.path.insert(0, os.path.dirname(__file__))
     from document_loader import load_and_chunk_all
 
-    chunks = load_and_chunk_all("demo_data")
+    chunks = load_and_chunk_all("policy_docs")
     index, chunks_with_meta = build_faiss_index(chunks)
     save_index(index, chunks_with_meta)

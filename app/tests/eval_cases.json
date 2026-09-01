@@ -4,15 +4,15 @@
   {"id": "policy_lost_package", "category": "policy_qa", "question": "What happens if my package is lost?", "expected": {"escalated": false, "must_contain_any": ["21", "30"]}},
   {"id": "policy_warranty_footwear", "category": "policy_qa", "question": "Does my footwear have a warranty?", "expected": {"escalated": false, "must_contain_any": ["6-month", "6 month", "six month"]}},
   {"id": "policy_warranty_apparel", "category": "policy_qa", "question": "What's the warranty on apparel?", "expected": {"escalated": false, "must_contain_any": ["3-month", "3 month", "three month"]}},
-  {"id": "policy_cancellation_window", "category": "policy_qa", "question": "Can I cancel my order after placing it?", "expected": {"escalated": false, "must_contain_any": ["1 hour", "one hour", "1-hour"]}},
+  {"id": "policy_cancellation_window", "category": "conflict_detection", "question": "Can I cancel my order after placing it?", "expected": {"escalated": true, "must_contain_any": ["conflicting"]}},
   {"id": "policy_payment_methods", "category": "policy_qa", "question": "What payment methods do you accept?", "expected": {"escalated": false, "must_contain_any": ["visa", "paypal", "mastercard"]}},
   {"id": "policy_loyalty_program", "category": "policy_qa", "question": "How does the rewards program work?", "expected": {"escalated": false, "must_contain_any": ["100 points", "$5"]}},
   {"id": "policy_wrong_item", "category": "policy_qa", "question": "What if I received the wrong item?", "expected": {"escalated": false, "must_contain_any": ["no return shipping cost", "our error", "expedited replacement"]}},
-  {"id": "policy_address_change", "category": "policy_qa", "question": "Can I change my shipping address?", "expected": {"escalated": false, "must_contain_any": ["1 hour", "one hour", "1-hour"]}},
+  {"id": "policy_address_change", "category": "conflict_detection", "question": "Can I change my shipping address?", "expected": {"escalated": true, "must_contain_any": ["conflicting"]}},
 
-  {"id": "conflict_return_window", "category": "conflict_detection", "question": "How long do I have to return an item?", "expected": {"escalated": true, "must_contain_any": ["conflicting"]}},
-  {"id": "conflict_refund_time", "category": "conflict_detection", "question": "How long does a refund take?", "expected": {"escalated": true, "must_contain_any": ["conflicting"]}},
-  {"id": "conflict_sale_items", "category": "conflict_detection", "question": "Can I return a sale item?", "expected": {"escalated": true, "must_contain_any": ["conflicting"]}},
+  {"id": "conflict_return_window", "category": "policy_qa", "question": "How long do I have to return an item?", "expected": {"escalated": false, "must_contain_any": ["30 days"]}},
+  {"id": "conflict_refund_time", "category": "policy_qa", "question": "How long does a refund take?", "expected": {"escalated": false, "must_contain_any": ["5-7", "5 to 7", "business days"]}},
+  {"id": "conflict_sale_items", "category": "policy_qa", "question": "Can I return a sale item?", "expected": {"escalated": false, "must_contain_any": ["store credit"]}},
   {"id": "conflict_damaged_item", "category": "conflict_detection", "question": "What if my item arrives damaged?", "expected": {"escalated": true, "must_contain_any": ["conflicting"]}},
 
   {"id": "outofscope_yoga_mats", "category": "policy_qa", "question": "Do you sell yoga mats?", "expected": {"escalated": true, "must_contain_any": ["confident answer", "flagging"]}},
@@ -43,7 +43,7 @@
   {"id": "policy_payment_failure", "category": "policy_qa", "question": "What happens if my payment doesn't go through?", "expected": {"escalated": false, "must_contain_any": ["24 hours", "24-hour"]}},
   {"id": "policy_data_after_deletion", "category": "policy_qa", "question": "Do you keep my order history after I delete my account?", "expected": {"escalated": false, "must_contain_any": ["7 years", "seven years"]}},
   {"id": "policy_cod", "category": "policy_qa", "question": "Is cash on delivery available?", "expected": {"escalated": false, "must_contain_any": ["do not accept", "not accept", "no"]}},
-  {"id": "policy_return_window_alt_phrasing", "category": "conflict_detection", "question": "Within how many days must I return something to get my money back?", "expected": {"escalated": true, "must_contain_any": ["conflicting"]}},
+  {"id": "policy_return_window_alt_phrasing", "category": "policy_qa", "question": "Within how many days must I return something to get my money back?", "expected": {"escalated": false, "must_contain_any": ["30 days"]}},
   {"id": "policy_free_vs_defect_shipping", "category": "policy_qa", "question": "Do you charge for return shipping if you sent me the wrong size, versus if I just changed my mind?", "expected": {"escalated": false, "must_contain_any": ["free", "no cost", "no charge"]}},
 
   {"id": "outofscope_human_request", "category": "policy_qa", "question": "Can I speak to a human right now?", "expected": {"escalated": true, "must_contain_any": ["confident answer", "flagging"]}},
@@ -63,6 +63,8 @@
   {"id": "sentiment_explicit_legal", "category": "sentiment", "question": "I'm going to sue if this isn't resolved.", "expected": {"flagged": true}},
   {"id": "sentiment_plain_complaint", "category": "sentiment", "question": "Not happy with the quality of this shirt.", "expected": {"flagged": false}},
 
+  {"id": "conflict_cancellation_window", "category": "conflict_detection", "question": "How long do I have to cancel my order?", "expected": {"escalated": true, "must_contain_any": ["conflicting"]}},
+  {"id": "conflict_cancellation_alt_phrasing", "category": "conflict_detection", "question": "Can I cancel my order 5 hours after placing it?", "expected": {"escalated": true, "must_contain_any": ["conflicting"]}},
   {"id": "order_lookup_nonexistent", "category": "order_lookup", "order_number": "9999", "total": "50.00", "expected": {"found": false}},
   {"id": "order_lookup_whitespace", "category": "order_lookup", "order_number": " 1001 ", "total": " 200.00 ", "expected": {"found": true, "status": "processing"}},
   {"id": "order_lookup_empty_number", "category": "order_lookup", "order_number": "", "total": "80.00", "expected": {"found": false}}
