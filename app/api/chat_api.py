@@ -91,4 +91,4 @@ def api_health():
 
 if __name__ == "__main__":
     # Different port from admin_app.py (5000) so both can run at once
-    app.run(host="0.0.0.0", debug=True, port=5001)
+    app.run(host="0.0.0.0", debug=False, port=5001)

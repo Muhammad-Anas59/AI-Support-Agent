@@ -30,7 +30,7 @@ answer is given.
 
 Flag it as escalate=true ONLY if the message clearly shows:
 - Genuine anger or frustration (not just a neutral complaint)
-- Urgency suggesting real harm or a time-critical problem (e.g. safety issue, medical reaction, allergic reaction)
+- Urgency suggesting real harm or a time-critical problem (e.g. safety issue, medical reaction, allergic reaction, being charged incorrectly or double-charged)
 - Legal language (e.g. mentions of a lawyer, lawsuit, chargeback threat, "reporting this")
 - Explicit threats or self-harm/safety concerns of any kind
 

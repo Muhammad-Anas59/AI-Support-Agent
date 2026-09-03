@@ -8,7 +8,7 @@
   {"id": "policy_payment_methods", "category": "policy_qa", "question": "What payment methods do you accept?", "expected": {"escalated": false, "must_contain_any": ["visa", "paypal", "mastercard"]}},
   {"id": "policy_loyalty_program", "category": "policy_qa", "question": "How does the rewards program work?", "expected": {"escalated": false, "must_contain_any": ["100 points", "$5"]}},
   {"id": "policy_wrong_item", "category": "policy_qa", "question": "What if I received the wrong item?", "expected": {"escalated": false, "must_contain_any": ["no return shipping cost", "our error", "expedited replacement"]}},
-  {"id": "policy_address_change", "category": "conflict_detection", "question": "Can I change my shipping address?", "expected": {"escalated": true, "must_contain_any": ["conflicting"]}},
+  {"id": "policy_address_change", "category": "policy_qa", "question": "Can I change my shipping address?", "expected": {"escalated": false, "must_contain_any": ["1 hour", "1-hour", "one hour"]}},
 
   {"id": "conflict_return_window", "category": "policy_qa", "question": "How long do I have to return an item?", "expected": {"escalated": false, "must_contain_any": ["30 days"]}},
   {"id": "conflict_refund_time", "category": "policy_qa", "question": "How long does a refund take?", "expected": {"escalated": false, "must_contain_any": ["5-7", "5 to 7", "business days"]}},

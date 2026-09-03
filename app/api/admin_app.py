@@ -34,7 +34,7 @@ ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
 
 @app.before_request
 def require_login():
-    if request.path in ("/login", "/login.html") or request.path.startswith("/static"):
+    if request.path in ("/login", "/login.html", "/storefront.html") or request.path.startswith("/static"):
         return
     if not session.get("logged_in"):
         if request.path.startswith("/api/"):
@@ -119,4 +119,4 @@ def api_update_policy(filename):
 
 
 if __name__ == "__main__":
-	app.run(host="0.0.0.0", debug=True, port=5000)
+	app.run(host="0.0.0.0", debug=False, port=5000)
