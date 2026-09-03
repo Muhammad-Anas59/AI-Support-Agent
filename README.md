@@ -1,256 +1,126 @@
-# AI Support Agent
+# Verve Athletics — AI Support Agent
 
-**Live demo:** [verve-support.duckdns.org/storefront.html](https://verve-support.duckdns.org/storefront.html) — try the chat widget directly.
-**Admin console:** [verve-support.duckdns.org](https://verve-support.duckdns.org) (login required — request demo credentials)
+A Shopify-integrated AI support agent with an activewear storefront demo,
+a customer-facing chat widget, and an authenticated admin console.
 
-An AI customer support agent for e-commerce brands. It answers from a
-business's real policy documents, catches contradictions between those
-documents before a customer ever sees them, looks up real order status
-from a live Shopify/WooCommerce store, and knows when to escalate to a
-human instead of guessing.
+## Live
 
-Built for any Shopify or e-commerce store — the policy documents, order
-lookup credentials, and branding are all swappable per business. This
-repository includes one fully worked example so the system can be run
-and tested end-to-end out of the box: a fictional activewear brand,
-**Verve Athletics**, with its own policy set and a live Shopify store
-connected. Point it at a different store's policies and Shopify
-credentials, and it works the same way for them.
+- Storefront: https://verve-support.duckdns.org/storefront.html
+- Admin console (login required): https://verve-support.duckdns.org
 
-## Screenshots
+## What it does
 
-**Admin login:**
-![Admin login](Project-Images/admin_login.png)
+- Answers policy questions (returns, shipping, warranty, loyalty, payments)
+  from a FAISS-indexed knowledge base of policy documents.
+- Detects genuine conflicts between policy documents and escalates rather
+  than guessing.
+- Looks up real Shopify orders by order number + total (for verification),
+  returning status and tracking info.
+- Flags urgent or sensitive messages (safety issues, legal threats,
+  billing disputes) for human follow-up.
+- Routes each message to the right handler (policy vs. order) before
+  responding.
 
-**Conflict detection catching a real contradiction, live in the chat widget:**
-![Conflict detection in the widget](Project-Images/widget_conflict_detected.png)
+## Stack
 
-**Answering a policy question with a live order lookup:**
-![Policy answer](Project-Images/widget_policy_answer.png)
-
-**Order lookup:**
-![Order lookup](Project-Images/widget_order_lookup.png)
-
-**Admin analytics dashboard:**
-![Admin analytics](Project-Images/admin_analytics.png)
-
-**Performance tab:**
-![Performance tab](Project-Images/performance_result.png)
-
-**Escalation ticket queue:**
-![Escalation tickets](Project-Images/admin_tickets.png)
-
-**Automated evaluation harness results:**
-![Evaluation summary](Project-Images/evaluation_summary.png)
-
-## Why this isn't a generic chatbot wrapper
-
-Most "AI support bot" demos are a single LLM call over a prompt. This
-project is built around five things that specifically aren't that:
-
-1. **Retrieval-grounded, refuses to guess.** Every answer is generated
-   only from retrieved policy text. If the retrieved text doesn't
-   actually answer the question, the assistant says so and escalates —
-   it never fills the gap with outside knowledge.
-2. **Conflict detection.** When a business's own documents disagree with
-   each other (e.g. an official policy says one thing, an outdated FAQ
-   page says another), the system catches it and escalates instead of
-   blending both into one confusing, wrong-sounding answer.
-3. **Real order lookup.** Order status/tracking questions are answered
-   from a live Shopify Admin API call, not static text.
-4. **Sentiment/urgency escalation.** Angry, urgent, or legal-sounding
-   messages are escalated immediately, regardless of whether a confident
-   automated answer exists — some things shouldn't be fully automated.
-5. **Full citation trail + confidence scoring.** Every policy answer
-   shows which document it came from and how confident the retrieval
-   was — no black box.
-
-## Architecture
-
-```
-Customer message
-      │
-      ▼
-sentiment_detector.py  ──flagged──► escalate to human
-      │ not flagged
-      ▼
-   router.py  ── classifies: "order" or "policy"
-      │                              │
-      ▼                              ▼
-order_lookup.py                retriever.py + conflict_detector.py
-(live Shopify data)             (RAG over policy documents)
-      │                              │
-      └──────────► assistant.py ◄────┘
-                  (ties it together,
-                   logs everything)
-                         │
-              ┌──────────┴──────────┐
-              ▼                     ▼
-      escalation_logger.py   interaction_logger.py
-      (tickets for humans,    (analytics data)
-       full conversation
-       history included)
-```
-
-Two ways to talk to the assistant:
-- **`assistant.py`** — terminal chat loop, for local testing
-- **`chat_api.py` + `widget.js`** — Flask API + an embeddable web chat
-  widget, for anything customer-facing
-
-One way to manage the business:
-- **`admin_app.py` + `admin.html`** — view escalated tickets (each
-  expandable to the full conversation that led to it), edit policy
-  documents, view analytics (resolution rate, volume, categories, time
-  saved). Protected behind a branded login page with session-based
-  authentication.
-
-## Security
-
-- **Admin console requires login.** Session-based authentication with a
-  branded login page (`login.html`), secure/HTTP-only session cookies,
-  and an 8-hour session expiry.
-- **Rate limiting** on the customer-facing chat endpoint (`/api/chat`)
-  to prevent abuse and protect API quota.
-- **HTTPS everywhere**, via a free Let's Encrypt certificate with
-  automatic renewal (nginx + certbot), reverse-proxied in front of both
-  Flask services.
-- **Server access restricted** — SSH limited to a specific IP, all
-  other inbound traffic scoped to only the ports actually in use.
-
-## Project structure
-
-```
-app/
-  core/
-    document_loader.py    # loads + chunks policy .txt files
-    embedder.py            # embeds chunks, builds the FAISS index
-    retriever.py            # RAG pipeline: retrieve + generate answer
-    conflict_detector.py    # checks retrieved chunks for contradictions
-    order_lookup.py         # Shopify Admin API order status lookup
-    router.py               # classifies order vs. policy questions
-    sentiment_detector.py   # flags anger/urgency/legal language
-    escalation_logger.py    # logs escalations as tickets, with full history
-    interaction_logger.py   # logs every interaction for analytics
-    assistant.py            # main entry point, ties everything together
-  api/
-    admin_app.py            # Flask backend for the admin dashboard (login-protected)
-    chat_api.py              # Flask backend for the customer chat widget (rate-limited)
-    static/
-      admin.html
-      login.html              # branded admin login page
-      widget.js
-      storefront.html          # example storefront with the widget embedded
-  data/
-    policy_index.faiss       # generated - not committed
-    chunks_metadata.json     # generated - not committed
-    escalation_tickets.jsonl # generated - not committed
-    interactions.jsonl       # generated - not committed
-  tests/
-    eval_cases.json          # labeled test cases across all subsystems
-    evaluation_harness.py    # runs every case against the real live pipeline
-    evaluation_report.md     # generated - latest scored results
-policy_docs/                   # example policy set - swap for any client's own docs
-  00_brand_info.txt
-  01_shipping_policy.txt
-  02_returns_policy.txt
-  03_website_faq.txt          # deliberately drifted, contains a planted conflict
-  04_warranty_policy.txt
-  05_cancellation_policy.txt
-  06_account_payment_policy.txt
-  _conflict_manifest.md       # documents the planted conflict, for testing
-.env.example
-requirements.txt
-Project-Images/                 # screenshots used in this README
-```
+- Flask (`chat_api.py` on port 5001, `admin_app.py` on port 5000), both
+  run as persistent `systemd` services.
+- nginx reverse proxy in front of both apps, real HTTPS via Let's Encrypt
+  (Certbot, auto-renewing) on a free DuckDNS subdomain.
+- Gemini (`gemini-3.5-flash-lite`) for the conversational layer, FAISS
+  for policy-document retrieval, Shopify Admin API for order data.
+- Vanilla JS chat widget (`widget.js`), no build step, embeddable via a
+  single `<script>` tag.
 
 ## Setup
 
-**1. Install dependencies**
 ```bash
+git clone <this-repo>
+cd AI-Support-Agent
+python3 -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-**2. Configure environment variables**
-
-Copy `.env.example` to `.env` and fill in:
+Create a `.env` file (not committed) with:
 ```
-GEMINI_API_KEY=your_gemini_api_key
-SHOPIFY_STORE_DOMAIN=your-store.myshopify.com
-SHOPIFY_ACCESS_TOKEN=shpat_your_admin_api_token
-ADMIN_USERNAME=your_chosen_admin_username
-ADMIN_PASSWORD=your_chosen_admin_password
-FLASK_SECRET_KEY=a_long_random_string
+GEMINI_API_KEY=...
+SHOPIFY_STORE_DOMAIN=...
+SHOPIFY_ACCESS_TOKEN=...
+ADMIN_USERNAME=...
+ADMIN_PASSWORD=...
+FLASK_SECRET_KEY=...
 ```
 
-**3. Build the retrieval index**
+Build the policy knowledge base index (re-run any time `policy_docs/`
+changes):
 ```bash
 python -m app.core.embedder
 ```
-This reads `policy_docs/`, chunks it, embeds every chunk, and saves the
-FAISS index + metadata to `app/data/`. Re-run this any time a policy
-document changes.
 
-## Running it
-
-**Terminal chat (fastest way to test):**
+Run locally:
 ```bash
-python -m app.core.assistant
+python -m app.api.chat_api    # port 5001
+python -m app.api.admin_app   # port 5000
 ```
 
-**Customer-facing web chat widget:**
-```bash
-python -m app.api.chat_api
-```
-Then open `app/api/static/storefront.html` directly in a browser, or
-visit the live version at the link above.
+In production, both run via `systemd` with `debug=False` — never enable
+Flask debug mode on a publicly reachable instance.
 
-**Admin dashboard:**
-```bash
-python -m app.api.admin_app
-```
-Then visit `http://localhost:5000` and log in with your `ADMIN_USERNAME`
-/ `ADMIN_PASSWORD`.
+## Project structure
 
-**Run the evaluation suite:**
+- `policy_docs/` — source policy documents the agent answers from.
+- `app/core/` — embedder, retrieval, conflict detection, sentiment
+  detection, router.
+- `app/api/` — the two Flask apps, plus `static/` (storefront, admin UI,
+  login page, chat widget).
+- `app/tests/` — `eval_cases.json` (test suite) and
+  `evaluation_harness.py` (runs it against the live system).
+- `app/data/` — generated FAISS index and `conflicts_log.json` (not
+  hand-edited).
+
+## Storefront
+
+`storefront.html` is a self-contained demo storefront with a working
+Shop section (Men/Women/Accessories filters), matched to the real
+product catalog in the connected Shopify store — same names and prices
+in both places. The Support section previews a real chat exchange and
+links into the live widget, which loads on every page via `widget.js`.
+
+## Security notes
+
+- Admin console requires login (session-based, 8-hour expiry). All admin
+  routes are gated by a single `before_request` hook in `admin_app.py` —
+  any new public-facing static file (like the storefront page or the
+  widget script) must be explicitly exempted there, or it will be
+  silently blocked behind the login page.
+- `/api/chat` is rate-limited (10 requests/minute/IP) to protect the
+  Gemini free-tier quota.
+- Flask debug mode is off in both services — leaving it on in production
+  exposes the interactive Werkzeug debugger, which allows arbitrary code
+  execution if triggered.
+- The EC2 security group should restrict SSH to your current IP (update
+  it when your ISP rotates your address) and should not expose ports
+  5000/5001 to the public internet — nginx is the only intended entry
+  point; those ports existing on "Anywhere" invites internet scanner
+  noise for no benefit.
+
+## Evaluation
+
 ```bash
+source venv/bin/activate
 python -m app.tests.evaluation_harness
 ```
-Runs the labeled test cases against the real, live pipeline — not
-mocked — covering policy Q&A, conflict detection, out-of-scope
-handling, order-vs-policy routing, sentiment detection, and order
-lookup. Produces a scored report at `app/tests/evaluation_report.md`.
 
-## Accuracy
+Runs the full test suite (policy Q&A, conflict detection, routing,
+sentiment, order lookup) against the live system and writes
+`app/tests/evaluation_report.md`. Current result: **98%+ (59/59 on the
+latest run)** — a handful of cases can occasionally hit Gemini's
+free-tier rate limit mid-run and need a retry, which the harness handles
+automatically via backoff.
 
-See `app/tests/evaluation_report.md` for the latest run's full detail,
-including per-category breakdowns and any failing cases with their
-actual output. The suite is run against the real, live pipeline (not
-mocked) on every significant change.
+The knowledge base includes one intentionally planted policy conflict
+(order cancellation window: 1 hour per the cancellation policy vs. an
+incorrect 24 hours in the FAQ) to keep the conflict-detection feature
+exercised by ongoing testing — see `_conflict_manifest.md`.
 
-## Known limitations (honest, on purpose)
-
-- **Order verification uses order number + total, not order number +
-  email.** Shopify blocks API access to customer PII (name, email,
-  phone, address) unless the store is on a paid plan — the example
-  store used here is free-tier. This is a demo-environment limitation,
-  not a product one: a real client's store is on a paid plan by
-  definition, so proper email verification works out of the box with
-  zero code changes once deployed against a real client's store. See
-  the docstring in `order_lookup.py` for details.
-- **Email intake isn't built.** Only the web chat widget exists as a
-  customer-facing channel right now. Email intake needs a paid mail-
-  sending service and hasn't been prioritized before a real client
-  needs it.
-
-## Status
-
-Deployed and live (see link at the top of this README) on AWS EC2,
-behind nginx with HTTPS. Core pipeline (retrieval, conflict detection,
-order lookup, routing, sentiment escalation, admin dashboard with
-authentication, analytics, customer chat widget, rate limiting) is
-built and tested against a manifest of planted policy conflicts, a
-broad sweep of general questions, and an automated evaluation suite,
-using the included Verve Athletics example dataset and Shopify store.
-Adapting this to a new business means swapping the contents of
-`policy_docs/`, re-running `embedder.py`, and connecting that
-business's own Shopify credentials.
