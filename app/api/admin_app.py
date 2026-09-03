@@ -34,7 +34,7 @@ ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
 
 @app.before_request
 def require_login():
-    if request.path in ("/login", "/login.html", "/storefront.html") or request.path.startswith("/static"):
+    if request.path in ("/login", "/login.html", "/storefront.html", "/widget.js") or request.path.startswith("/static"):
         return
     if not session.get("logged_in"):
         if request.path.startswith("/api/"):

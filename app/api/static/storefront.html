@@ -7,25 +7,46 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #1B2438;
+    --cream: #F6F4EF;
+    --ink: #10151F;
+    --slate: #4A5468;
+    --amber: #F5A623;
+    --line: #E6E1D6;
+  }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { transition: none !important; }
+  }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: #F6F4EF;
-    color: #10151F;
+    background: var(--cream);
+    color: var(--ink);
   }
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--amber);
+    outline-offset: 2px;
+  }
+
   header {
-    background: #1B2438;
-    color: #F6F4EF;
+    background: var(--navy);
+    color: var(--cream);
     padding: 20px 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
   }
   header .logo {
     font-weight: 800;
     letter-spacing: 0.08em;
     font-size: 18px;
   }
-  header .logo span { color: #F5A623; }
+  header .logo span { color: var(--amber); }
   nav a {
     color: #A9B3C9;
     text-decoration: none;
@@ -34,9 +55,12 @@
     font-weight: 600;
     letter-spacing: 0.04em;
     text-transform: uppercase;
+    transition: color 0.15s ease;
   }
+  nav a:hover, nav a.active { color: var(--cream); }
+
   .hero {
-    padding: 100px 40px;
+    padding: 100px 40px 90px;
     text-align: center;
   }
   .hero h1 {
@@ -47,7 +71,7 @@
     margin: 0 auto 16px;
   }
   .hero p {
-    color: #4A5468;
+    color: var(--slate);
     font-size: 17px;
     max-width: 480px;
     margin: 0 auto;
@@ -57,41 +81,473 @@
     margin: 40px auto 0;
     padding: 16px 20px;
     background: #fff;
-    border: 1px solid #E6E1D6;
+    border: 1px solid var(--line);
     border-radius: 12px;
     font-size: 13px;
-    color: #4A5468;
+    color: var(--slate);
     text-align: left;
   }
-  .note strong { color: #10151F; }
+  .note strong { color: var(--ink); }
+
+  section { scroll-margin-top: 76px; }
+
+  .shop {
+    padding: 90px 40px 100px;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+  .shop-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-bottom: 44px;
+  }
+  .shop-head h2 {
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    max-width: 420px;
+  }
+  .shop-head p {
+    color: var(--slate);
+    font-size: 15px;
+    max-width: 320px;
+  }
+  .tabs {
+    display: flex;
+    gap: 4px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 4px;
+  }
+  .tab {
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--slate);
+    background: none;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .tab.active {
+    background: var(--navy);
+    color: var(--cream);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .card .swatch {
+    height: 160px;
+    background: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .card .card-body {
+    padding: 18px 20px 22px;
+  }
+  .card .kicker {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--amber);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .card p {
+    font-size: 13px;
+    color: var(--slate);
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+  .card .price {
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .card.hidden { display: none; }
+
+  .support {
+    background: var(--navy);
+    color: var(--cream);
+    padding: 90px 40px;
+  }
+  .support-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 64px;
+    align-items: start;
+  }
+  .support h2 {
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    max-width: 380px;
+    margin-bottom: 16px;
+  }
+  .support > .support-inner > .support-info > p.lead {
+    color: #A9B3C9;
+    font-size: 15px;
+    max-width: 380px;
+    margin-bottom: 32px;
+  }
+  .policy-list {
+    list-style: none;
+  }
+  .policy-list li {
+    border-left: 2px solid var(--amber);
+    padding: 4px 0 20px 18px;
+    margin-bottom: 4px;
+  }
+  .policy-list li:last-child { padding-bottom: 0; }
+  .policy-list strong {
+    display: block;
+    font-size: 15px;
+    margin-bottom: 4px;
+  }
+  .policy-list span {
+    display: block;
+    font-size: 13px;
+    color: #A9B3C9;
+    max-width: 340px;
+  }
+
+  .chat-preview {
+    background: #232E45;
+    border: 1px solid #364260;
+    border-radius: 14px;
+    padding: 22px;
+  }
+  .chat-preview-head {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #A9B3C9;
+    margin-bottom: 16px;
+  }
+  .bubble {
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 12px 14px;
+    border-radius: 12px;
+    max-width: 88%;
+    margin-bottom: 10px;
+  }
+  .bubble.user {
+    background: #364260;
+    color: var(--cream);
+    margin-left: auto;
+    border-bottom-right-radius: 4px;
+  }
+  .bubble.bot {
+    background: var(--amber);
+    color: var(--navy);
+    font-weight: 600;
+    border-bottom-left-radius: 4px;
+  }
+  .chat-hint {
+    font-size: 13px;
+    color: #A9B3C9;
+    margin-top: 14px;
+  }
+
+  footer {
+    padding: 32px 40px;
+    text-align: center;
+    color: var(--slate);
+    font-size: 13px;
+  }
+  footer .logo {
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    font-size: 14px;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  footer .logo span { color: var(--amber); }
+
+  @media (max-width: 760px) {
+    header { padding: 16px 20px; flex-wrap: wrap; gap: 12px; }
+    nav a { margin-left: 0; margin-right: 20px; }
+    .hero { padding: 64px 20px 56px; }
+    .hero h1 { font-size: 32px; }
+    .shop { padding: 56px 20px 64px; }
+    .grid { grid-template-columns: 1fr; }
+    .support { padding: 56px 20px; }
+    .support-inner { grid-template-columns: 1fr; gap: 40px; }
+  }
 </style>
 </head>
 <body>
-
 <header>
   <div class="logo">VERVE<span>ATHLETICS</span></div>
   <nav>
-    <a href="#">Shop</a>
-    <a href="#">Men</a>
-    <a href="#">Women</a>
-    <a href="#">Support</a>
+    <a href="#shop" data-filter="all">Shop</a>
+    <a href="#shop" data-filter="men">Men</a>
+    <a href="#shop" data-filter="women">Women</a>
+    <a href="#support">Support</a>
   </nav>
 </header>
 
 <div class="hero">
   <h1>Built for movement. Backed by real support.</h1>
-  
-
   <div class="note">
-  <p>Engineered activewear for training, recovery, and everything in between. Questions about sizing, shipping, or your order? Our support team is one click away.</p> 
+  <p>Engineered activewear for training, recovery, and everything in between. Questions about sizing, shipping, or your order? Our support team is one click away.</p>
   </div>
 </div>
 
+<section id="shop" class="shop">
+  <div class="shop-head">
+    <div>
+      <h2>Shop the collection</h2>
+      <p>Training essentials built for interval days, long runs, and everything after.</p>
+    </div>
+    <div class="tabs" role="tablist">
+      <button class="tab active" data-filter="all">All</button>
+      <button class="tab" data-filter="men">Men</button>
+      <button class="tab" data-filter="women">Women</button>
+    </div>
+  </div>
+  <div class="grid" id="productGrid">
+    <div class="card" data-category="men">
+      <div class="swatch"><svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="#1B2438" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><rect x="16" y="8" width="24" height="7" rx="3"/><path d="M17 15 L27 15 L26 32 Q26 34 24 34 L20 34 Q18 34 18 32 Z"/><path d="M29 15 L39 15 L38 32 Q38 34 36 34 L32 34 Q30 34 30 32 Z"/></svg></div>
+      <div class="card-body">
+        <div class="kicker">Men</div>
+        <h3>Ascent Running Shorts</h3>
+        <p>Four-way stretch shorts with a zip pocket built for interval days. Lightweight liner, no chafe seams.</p>
+        <div class="price">$42</div>
+      </div>
+    </div>
+    <div class="card" data-category="men">
+      <div class="swatch"><svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="#1B2438" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M17 8 L9 14 L14 22 L19 18 L19 49 L37 49 L37 18 L42 22 L47 14 L39 8 L34 10 C32 12.5 24 12.5 22 10 Z M28 12 L28 49"/></svg></div>
+      <div class="card-body">
+        <div class="kicker">Men</div>
+        <h3>Ridgeline Half-Zip Pullover</h3>
+        <p>Brushed thermal layer for cold starts and cool-downs. Thumbhole cuffs, mid-weight warmth without the bulk.</p>
+        <div class="price">$68</div>
+      </div>
+    </div>
+    <div class="card" data-category="men">
+      <div class="swatch"><svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="#1B2438" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M17 8 L10 14 L15 21 L19 18 L19 48 L37 48 L37 18 L41 21 L46 14 L39 8 L34 11 C32 13.5 24 13.5 22 11 Z"/></svg></div>
+      <div class="card-body">
+        <div class="kicker">Men</div>
+        <h3>Momentum Training Tee</h3>
+        <p>Lightweight mesh panels placed exactly where you sweat. Quick-dry fabric, tagless collar.</p>
+        <div class="price">$34</div>
+      </div>
+    </div>
+    <div class="card" data-category="men">
+      <div class="swatch"><svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="#1B2438" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M20 10 L36 10 L38 16 L34 16 L34 46 L22 46 L22 16 L18 16 Z"/></svg></div>
+      <div class="card-body">
+        <div class="kicker">Men</div>
+        <h3>Trailhead Joggers</h3>
+        <p>Tapered fit with zip cuffs, built for warm-ups that turn into the whole workout.</p>
+        <div class="price">$54</div>
+      </div>
+    </div>
+    <div class="card" data-category="men">
+      <div class="swatch"><svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="#1B2438" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M17 8 L10 14 L15 21 L19 18 L19 48 L37 48 L37 18 L41 21 L46 14 L39 8 L34 11 C32 13.5 24 13.5 22 11 Z"/></svg></div>
+      <div class="card-body">
+        <div class="kicker">Men</div>
+        <h3>Grid Compression Tee</h3>
+        <p>Second-skin compression fit for lifting days. Flatlock seams, four-way stretch.</p>
+        <div class="price">$38</div>
+      </div>
+    </div>
+    <div class="card" data-category="men">
+      <div class="swatch"><svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="#1B2438" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M17 8 L9 14 L14 22 L19 18 L19 49 L37 49 L37 18 L42 22 L47 14 L39 8 L34 10 C32 12.5 24 12.5 22 10 Z M28 12 L28 49"/></svg></div>
+      <div class="card-body">
+        <div class="kicker">Men</div>
+        <h3>Horizon Windbreaker</h3>
+        <p>Packable, wind-cut shell for early starts. Reflective trim for low light.</p>
+        <div class="price">$78</div>
+      </div>
+    </div>
+    <div class="card" data-category="unisex">
+      <div class="swatch"><svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="#1B2438" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M20 8 L36 8 L36 30 C36 38 32 44 28 44 C24 44 20 38 20 30 Z M24 44 L22 48 M32 44 L34 48"/></svg></div>
+      <div class="card-body">
+        <div class="kicker">Accessories</div>
+        <h3>Pace Ankle Socks</h3>
+        <p>Cushioned running socks with arch support. Breathable mesh zones.</p>
+        <div class="price">$12</div>
+      </div>
+    </div>
+    <div class="card" data-category="men">
+      <div class="swatch"><svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="#1B2438" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M17 8 L9 14 L14 22 L19 18 L19 49 L37 49 L37 18 L42 22 L47 14 L39 8 L34 10 C32 12.5 24 12.5 22 10 Z M28 12 L28 49"/></svg></div>
+      <div class="card-body">
+        <div class="kicker">Men</div>
+        <h3>Solstice Zip Hoodie</h3>
+        <p>Midweight zip hoodie for warm-ups and cool evenings. Kangaroo pocket, brushed interior.</p>
+        <div class="price">$72</div>
+      </div>
+    </div>
+    <div class="card" data-category="women">
+      <div class="swatch"><svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="#1B2438" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><rect x="16" y="8" width="24" height="6" rx="3"/><path d="M17 14 L27 14 L25 48 Q25 50 23 50 L21 50 Q19 50 19 48 Z"/><path d="M29 14 L39 14 L37 48 Q37 50 35 50 L33 50 Q31 50 31 48 Z"/></svg></div>
+      <div class="card-body">
+        <div class="kicker">Women</div>
+        <h3>Flux Seamless Leggings</h3>
+        <p>Squat-proof compression that moves through a full range of motion. High-rise waistband, no-slip hem.</p>
+        <div class="price">$58</div>
+      </div>
+    </div>
+    <div class="card" data-category="women">
+      <div class="swatch"><svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="#1B2438" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M21 9 L20 15"/><path d="M35 9 L36 15"/><ellipse cx="22" cy="19" rx="6" ry="6"/><ellipse cx="34" cy="19" rx="6" ry="6"/><path d="M17 24 Q28 30 39 24 L39 27 Q28 33 17 27 Z"/></svg></div>
+      <div class="card-body">
+        <div class="kicker">Women</div>
+        <h3>Tempo Sports Bra</h3>
+        <p>Medium support with a racerback cut for high-mileage days. Moisture-wicking, no underwire.</p>
+        <div class="price">$36</div>
+      </div>
+    </div>
+    <div class="card" data-category="women">
+      <div class="swatch"><svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="#1B2438" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M20 8 L36 8 L34 14 L38 44 L18 44 L22 14 Z M22 12 L34 12"/></svg></div>
+      <div class="card-body">
+        <div class="kicker">Women</div>
+        <h3>Apex Racerback Tank</h3>
+        <p>Breathable racerback tank built for hot mileage. Currently restocking.</p>
+        <div class="price">$30</div>
+      </div>
+    </div>
+    <div class="card" data-category="women">
+      <div class="swatch"><svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="#1B2438" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M17 8 L9 14 L14 22 L19 18 L19 49 L37 49 L37 18 L42 22 L47 14 L39 8 L34 10 C32 12.5 24 12.5 22 10 Z M28 12 L28 49"/></svg></div>
+      <div class="card-body">
+        <div class="kicker">Women</div>
+        <h3>Summit Wind Jacket</h3>
+        <p>Packable shell that cuts wind without trapping heat. Fits in its own pocket for unpredictable weather.</p>
+        <div class="price">$88</div>
+      </div>
+    </div>
+    <div class="card" data-category="women">
+      <div class="swatch"><svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="#1B2438" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M20 8 L36 8 L34 14 L36 32 L20 32 L22 14 Z M22 12 L34 12"/></svg></div>
+      <div class="card-body">
+        <div class="kicker">Women</div>
+        <h3>Pulse Crop Tank</h3>
+        <p>Cropped, breathable tank for studio sessions and summer miles.</p>
+        <div class="price">$32</div>
+      </div>
+    </div>
+    <div class="card" data-category="women">
+      <div class="swatch"><svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="#1B2438" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M17 8 L8 15 L14 24 L19 20 L19 48 L37 48 L37 20 L42 24 L48 15 L39 8 L34 11 C32 13.5 24 13.5 22 11 Z"/></svg></div>
+      <div class="card-body">
+        <div class="kicker">Women</div>
+        <h3>Endure Long-Sleeve</h3>
+        <p>Long-sleeve base layer with thumbholes. Four-way stretch for full range of motion.</p>
+        <div class="price">$44</div>
+      </div>
+    </div>
+    <div class="card" data-category="women">
+      <div class="swatch"><svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="#1B2438" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><rect x="16" y="6" width="24" height="10" rx="3"/><path d="M17 16 L27 16 L26 32 Q26 34 24 34 L20 34 Q18 34 18 32 Z"/><path d="M29 16 L39 16 L38 32 Q38 34 36 34 L32 34 Q30 34 30 32 Z"/></svg></div>
+      <div class="card-body">
+        <div class="kicker">Women</div>
+        <h3>Echo High-Rise Shorts</h3>
+        <p>High-rise training shorts with an inner liner, built for squats and sprints alike.</p>
+        <div class="price">$48</div>
+      </div>
+    </div>
+    <div class="card" data-category="unisex">
+      <div class="swatch"><svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="#1B2438" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M20 8 L36 8 L36 30 C36 38 32 44 28 44 C24 44 20 38 20 30 Z M24 44 L22 48 M32 44 L34 48"/></svg></div>
+      <div class="card-body">
+        <div class="kicker">Accessories</div>
+        <h3>Recovery Grip Socks</h3>
+        <p>Cushioned, grip-soled socks for recovery days and studio floors.</p>
+        <div class="price">$14</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="support" class="support">
+  <div class="support-inner">
+    <div class="support-info">
+      <h2>Real support, not a runaround.</h2>
+      <p class="lead">No ticket queues. Ask a question in the chat and get a straight answer, backed by our actual policies.</p>
+      <ul class="policy-list">
+        <li>
+          <strong>30 days to return anything</strong>
+          <span>Free exchanges on size or color within that window, subject to availability.</span>
+        </li>
+        <li>
+          <strong>5–7 business days, standard shipping</strong>
+          <span>10–15 days internationally. Every order is tracked from checkout.</span>
+        </li>
+        <li>
+          <strong>Answers, not auto-replies</strong>
+          <span>Order status, sizing, and policy questions get resolved in the chat, in seconds.</span>
+        </li>
+      </ul>
+    </div>
+    <div class="chat-preview">
+      <div class="chat-preview-head">Live chat preview</div>
+      <div class="bubble user">Can I exchange for a different size?</div>
+      <div class="bubble bot">Yep — free exchanges within 30 days, subject to availability.</div>
+      <p class="chat-hint">Try it yourself — the chat is in the corner of this page.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="logo">VERVE<span>ATHLETICS</span></div>
+  <div>Engineered activewear, backed by support that actually helps.</div>
+</footer>
+
 <script>
-  // Point the widget at your local chat_api.py server
   window.VERVE_CHAT_API = "https://verve-support.duckdns.org";
+
+  (function () {
+    var navLinks = document.querySelectorAll('nav a[data-filter]');
+    var tabs = document.querySelectorAll('.tab[data-filter]');
+    var cards = document.querySelectorAll('.card[data-category]');
+
+    function applyFilter(filter) {
+      cards.forEach(function (card) {
+        var cat = card.getAttribute('data-category');
+        var match = filter === 'all' || cat === filter || cat === 'unisex';
+        card.classList.toggle('hidden', !match);
+      });
+      tabs.forEach(function (tab) {
+        tab.classList.toggle('active', tab.getAttribute('data-filter') === filter);
+      });
+      navLinks.forEach(function (link) {
+        link.classList.toggle('active', link.getAttribute('data-filter') === filter);
+      });
+    }
+
+    navLinks.forEach(function (link) {
+      link.addEventListener('click', function () {
+        applyFilter(link.getAttribute('data-filter'));
+      });
+    });
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        applyFilter(tab.getAttribute('data-filter'));
+      });
+    });
+  })();
 </script>
 <script src="widget.js"></script>
-
 </body>
 </html>

@@ -31,9 +31,9 @@
   {"id": "sentiment_mild_complaint", "category": "sentiment", "question": "This is taking forever, when will my order arrive?", "expected": {"flagged": false}},
   {"id": "sentiment_neutral", "category": "sentiment", "question": "Can I exchange my shoes for a different size?", "expected": {"flagged": false}},
 
-  {"id": "order_lookup_shipped", "category": "order_lookup", "order_number": "1002", "total": "80.00", "expected": {"found": true, "status": "shipped"}},
-  {"id": "order_lookup_processing", "category": "order_lookup", "order_number": "1001", "total": "200.00", "expected": {"found": true, "status": "processing"}},
-  {"id": "order_lookup_wrong_total", "category": "order_lookup", "order_number": "1002", "total": "999.99", "expected": {"found": false}},
+  {"id": "order_lookup_shipped", "category": "order_lookup", "order_number": "1011", "total": "94.00", "expected": {"found": true, "status": "shipped"}},
+  {"id": "order_lookup_processing", "category": "order_lookup", "order_number": "1015", "total": "88.00", "expected": {"found": true, "status": "processing"}},
+  {"id": "order_lookup_wrong_total", "category": "order_lookup", "order_number": "1011", "total": "999.99", "expected": {"found": false}},
 
   {"id": "policy_swap_color", "category": "policy_qa", "question": "Is there a fee to swap for a different color?", "expected": {"escalated": false, "must_contain_any": ["free", "no charge", "no cost"]}},
   {"id": "policy_lost_domestic_window", "category": "policy_qa", "question": "What if my package sat at the same tracking status for over a week?", "expected": {"escalated": false, "must_contain_any": ["7", "carrier", "investigation"]}},
@@ -66,6 +66,6 @@
   {"id": "conflict_cancellation_window", "category": "conflict_detection", "question": "How long do I have to cancel my order?", "expected": {"escalated": true, "must_contain_any": ["conflicting"]}},
   {"id": "conflict_cancellation_alt_phrasing", "category": "conflict_detection", "question": "Can I cancel my order 5 hours after placing it?", "expected": {"escalated": true, "must_contain_any": ["conflicting"]}},
   {"id": "order_lookup_nonexistent", "category": "order_lookup", "order_number": "9999", "total": "50.00", "expected": {"found": false}},
-  {"id": "order_lookup_whitespace", "category": "order_lookup", "order_number": " 1001 ", "total": " 200.00 ", "expected": {"found": true, "status": "processing"}},
-  {"id": "order_lookup_empty_number", "category": "order_lookup", "order_number": "", "total": "80.00", "expected": {"found": false}}
+  {"id": "order_lookup_whitespace", "category": "order_lookup", "order_number": " 1015 ", "total": " 88.00 ", "expected": {"found": true, "status": "processing"}},
+  {"id": "order_lookup_empty_number", "category": "order_lookup", "order_number": "", "total": "94.00", "expected": {"found": false}}
 ]

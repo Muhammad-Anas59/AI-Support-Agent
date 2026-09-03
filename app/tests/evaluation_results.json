@@ -42,7 +42,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "Standard domestic shipping takes 5 to 7 business days.",
+        "actual_answer": "Our standard domestic shipping takes 5 to 7 business days.",
         "escalated_match": true,
         "content_match": true
       }
@@ -54,7 +54,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "Our international shipping options include Standard International, which takes 10 to 15 business days, and Express International, which takes 5 to 7 business days. Let me know if you need help with anything else!",
+        "actual_answer": "Our international shipping options include Standard International, which takes 10 to 15 business days, and Express International, which takes 5 to 7 business days. Please let me know if you have any other questions!",
         "escalated_match": true,
         "content_match": true
       }
@@ -66,7 +66,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "If your domestic package shows no tracking movement for 7+ business days, you can contact support so we can start an investigation with the carrier. Per our shipping policy, we don't issue refunds for delayed packages until the carrier officially confirms the package is lost, which is typically after 21 days for domestic orders.",
+        "actual_answer": "If a domestic package shows no tracking movement for 7 or more business days, you can contact support to start an investigation with the carrier. Per our shipping policy, we do not issue refunds for delayed packages until the carrier officially confirms the package as lost, which is typically after 21 days for domestic orders.",
         "escalated_match": true,
         "content_match": true
       }
@@ -78,7 +78,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "Yes, according to our warranty policy, all footwear comes with a 6-month warranty against manufacturing defects like sole separation, stitching failure, or zipper malfunction.",
+        "actual_answer": "Yes, all of our footwear comes with a 6-month warranty against manufacturing defects like sole separation, stitching failure, or zipper malfunctions! If you ever need to report an issue, just reach out to us with your order number and photos of the defect.",
         "escalated_match": true,
         "content_match": true
       }
@@ -90,7 +90,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "Hi there! Our apparel comes with a 3-month warranty against fabric defects like seam tearing and print peeling. Let me know if you need help reporting anything!",
+        "actual_answer": "Hi there! Our apparel comes with a 3-month warranty against fabric defects like seam tearing or print peeling. Let me know if you need help reporting an issue!",
         "escalated_match": true,
         "content_match": true
       }
@@ -114,7 +114,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "We accept Visa, Mastercard, American Express, PayPal, Apple Pay, and Google Pay!",
+        "actual_answer": "We accept Visa, Mastercard, American Express, PayPal, Apple Pay, and Google Pay for your convenience.",
         "escalated_match": true,
         "content_match": true
       }
@@ -126,7 +126,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "Hi there! Under our Verve Rewards program, you earn 1 point for every $1 you spend, and 100 points will get you $5 off a future order. Just keep in mind that your points will expire 12 months after they're earned, and they'll be credited to your account 7 days after delivery. Let me know if you have any other questions!",
+        "actual_answer": "Hi there! Under our Verve Rewards program, you earn 1 point for every $1 you spend, and every 100 points gets you $5 off a future order. Just keep in mind that your points will expire 12 months after they're earned, and they'll show up in your account 7 days after your order is delivered. Let me know if you have any other questions!",
         "escalated_match": true,
         "content_match": true
       }
@@ -138,7 +138,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "If you received the wrong item or our mistake was on your end, our return policy states there is no return shipping cost, and you can even request expedited replacement shipping at no charge.",
+        "actual_answer": "If you received the wrong item or if the mistake was on our end, there is no return shipping cost, and you can also request expedited replacement shipping at no charge.",
         "escalated_match": true,
         "content_match": true
       }
@@ -150,7 +150,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "Yes, you can request a change to your shipping address as long as your order hasn't shipped yet. Per our cancellation policy, you'll need to reach out to support within the same 1-hour window allowed for cancellations, though we cannot guarantee changes once fulfillment has started.",
+        "actual_answer": "Yes, you can request a change to your shipping address as long as your order hasn't shipped yet. Per our cancellation policy, you'll need to contact support immediately within a 1-hour window of placing the order, though we cannot guarantee changes once fulfillment has started.",
         "escalated_match": true,
         "content_match": true
       }
@@ -162,7 +162,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "You have 30 days from the date you receive your order to return an item for a refund or exchange, as long as it's unworn with the original tags attached.",
+        "actual_answer": "According to our return policy, you have 30 days from the date you receive your order to return an item for a refund.",
         "escalated_match": true,
         "content_match": true
       }
@@ -174,7 +174,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "According to our return policy, refunds are typically processed within 5 to 7 business days after we receive your returned item, or within 1 to 2 business days if you opt for store credit.",
+        "actual_answer": "Hi there! According to our return policy, refunds back to your original payment method are typically processed within 5 to 7 business days of us receiving your returned item, while store credit refunds are processed within 1 to 2 business days. Let me know if you need help with anything else!",
         "escalated_match": true,
         "content_match": true
       }
@@ -186,7 +186,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "Yes, you can return a sale item! According to our policy, items purchased during a sale (marked 30% off or more) are eligible for store credit rather than a cash refund, unless the item is defective.",
+        "actual_answer": "Yes, you can return a sale item! According to our return policy, items purchased during a sale that are 30% off or more are eligible for store credit unless they are defective.",
         "escalated_match": true,
         "content_match": true
       }
@@ -294,7 +294,7 @@
       "passed": true,
       "details": {
         "actual_flagged": true,
-        "reason": "the customer explicitly threatens legal action and a charge dispute."
+        "reason": "the customer explicitly threatens legal action and a chargeback."
       }
     },
     {
@@ -304,7 +304,7 @@
       "passed": true,
       "details": {
         "actual_flagged": true,
-        "reason": "the customer is experiencing a physical health issue (an allergic reaction) which represents a time-critical medical urgency."
+        "reason": "the customer is reporting an allergic reaction and physical harm requiring immediate attention."
       }
     },
     {
@@ -314,7 +314,7 @@
       "passed": true,
       "details": {
         "actual_flagged": true,
-        "reason": "the customer expresses genuine anger and frustration over a recurring issue with no resolution."
+        "reason": "the customer shows genuine anger and frustration about repeated unresolved errors."
       }
     },
     {
@@ -340,7 +340,7 @@
     {
       "id": "order_lookup_shipped",
       "category": "order_lookup",
-      "question": "order=1002 total=80.00",
+      "question": "order=1011 total=94.00",
       "passed": true,
       "details": {
         "actual_found": true,
@@ -351,7 +351,7 @@
     {
       "id": "order_lookup_processing",
       "category": "order_lookup",
-      "question": "order=1001 total=200.00",
+      "question": "order=1015 total=88.00",
       "passed": true,
       "details": {
         "actual_found": true,
@@ -362,7 +362,7 @@
     {
       "id": "order_lookup_wrong_total",
       "category": "order_lookup",
-      "question": "order=1002 total=999.99",
+      "question": "order=1011 total=999.99",
       "passed": true,
       "details": {
         "actual_found": false,
@@ -377,7 +377,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "Hi there! According to our returns policy, exchanges for a different color are completely free of charge within our 30-day return window, as long as the item is in stock.",
+        "actual_answer": "Hi there! Our return policy allows you to exchange items for a different color free of charge within our 30-day window, as long as the item is in stock. Let me know if you need help getting that started!",
         "escalated_match": true,
         "content_match": true
       }
@@ -389,7 +389,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "If your package shows no tracking movement for 7 or more business days, our shipping policy asks that you reach out to our support team so we can start an investigation with the carrier.",
+        "actual_answer": "If your package shows no tracking movement for 7 business days, our shipping policy states you can contact support so we can start an investigation with the carrier.",
         "escalated_match": true,
         "content_match": true
       }
@@ -401,7 +401,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "Hi there! You need 100 loyalty points to get $5 off a future order, according to our rewards program policy. Let me know if you need help with anything else!",
+        "actual_answer": "Hi there! You need 100 loyalty points to get $5 off a future order, according to our loyalty program policy. Let me know if you have any other questions!",
         "escalated_match": true,
         "content_match": true
       }
@@ -425,7 +425,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "Hi there! Yes, according to our account and payment policy, gift cards can be combined with a promo code on the same order. Let me know if you need help with anything else!",
+        "actual_answer": "Yes, according to our account and payment policy, gift cards can be combined with a promo code on the same order! Let me know if you need help with anything else.",
         "escalated_match": true,
         "content_match": true
       }
@@ -437,7 +437,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "If your payment fails, our account and payment policy notes that the order is held for 24 hours so you can retry the payment before it gets automatically cancelled.",
+        "actual_answer": "If your payment fails, our account and payment policy notes that the order is held for 24 hours so you can retry the payment before it is automatically cancelled.",
         "escalated_match": true,
         "content_match": true
       }
@@ -449,7 +449,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "Hi there! Yes, our account payment policy notes that your order history is retained for 7 years for tax and legal record-keeping even after your account is deleted, though it won't be accessible to you anymore. Let me know if you need help with anything else!",
+        "actual_answer": "Yes, our account policy notes that your order history is retained for 7 years for tax and legal record-keeping even after your account is deleted, though it will no longer be accessible to you.",
         "escalated_match": true,
         "content_match": true
       }
@@ -461,7 +461,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "I'm sorry, but cash on delivery is not available as we do not accept it. We do accept Visa, Mastercard, American Express, PayPal, Apple Pay, and Google Pay!",
+        "actual_answer": "No, we do not accept cash on delivery. We do, however, accept Visa, Mastercard, American Express, PayPal, Apple Pay, and Google Pay!",
         "escalated_match": true,
         "content_match": true
       }
@@ -473,7 +473,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "Hi there! Our return policy allows you to return items within 30 days of receiving your order for a full refund.",
+        "actual_answer": "You have 30 days from the date you receive your order to return it for a refund, as long as the items are unworn with tags attached.",
         "escalated_match": true,
         "content_match": true
       }
@@ -485,7 +485,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "If we sent you the wrong size, there is no return shipping cost. Additionally, according to our return policy, returns due to customer preference like changing your mind are also free when you use our prepaid label.",
+        "actual_answer": "If you changed your mind, return shipping is free with our prepaid label. If we sent you the wrong size or made a mistake on our end, there is also no return shipping cost.",
         "escalated_match": true,
         "content_match": true
       }
@@ -533,7 +533,7 @@
       "passed": true,
       "details": {
         "actual_escalated": false,
-        "actual_answer": "Our return policy allows you to easily start a return through the \"My Orders\" page on our website or by emailing our support team, with free return shipping for customer preference items using our prepaid label. To answer your second question, yes, we certainly do ship to Canada!",
+        "actual_answer": "Our return policy allows you to easily start a return through the \"My Orders\" page on our website or by emailing support with your order number. And yes, we do ship to Canada!",
         "escalated_match": true,
         "content_match": true
       }
@@ -595,7 +595,7 @@
       "passed": true,
       "details": {
         "actual_flagged": true,
-        "reason": "the customer is reporting an urgent financial issue involving being double-charged."
+        "reason": "the customer is experiencing a time-critical financial issue involving a double charge and requires immediate assistance."
       }
     },
     {
@@ -605,7 +605,7 @@
       "passed": true,
       "details": {
         "actual_flagged": true,
-        "reason": "the message describes a dangerous safety issue involving a product catching fire."
+        "reason": "the message describes a dangerous product safety issue involving a fire hazard."
       }
     },
     {
@@ -676,7 +676,7 @@
     {
       "id": "order_lookup_whitespace",
       "category": "order_lookup",
-      "question": "order= 1001  total= 200.00 ",
+      "question": "order= 1015  total= 88.00 ",
       "passed": true,
       "details": {
         "actual_found": true,
@@ -687,7 +687,7 @@
     {
       "id": "order_lookup_empty_number",
       "category": "order_lookup",
-      "question": "order= total=80.00",
+      "question": "order= total=94.00",
       "passed": true,
       "details": {
         "actual_found": false,

@@ -1,6 +1,6 @@
 # Evaluation Report
 
-Generated: 2026-09-03T04:44:54.861372+00:00
+Generated: 2026-09-03T10:56:47.360580+00:00
 
 **Knowledge base:** 7 policy documents / 39 chunks
 
