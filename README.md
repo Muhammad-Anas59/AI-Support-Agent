@@ -8,6 +8,35 @@ a customer-facing chat widget, and an authenticated admin console.
 - Storefront: https://verve-support.duckdns.org/storefront.html
 - Admin console (login required): https://verve-support.duckdns.org
 
+## Screenshots
+
+**Storefront homepage, with the chat widget's live preview:**
+![Storefront homepage](Project-Images/storefront_homepage.png)
+
+**Conflict detection catching a real contradiction, live in the chat widget:**
+![Conflict detection in the widget](Project-Images/widget_conflict_detected.png)
+
+**Answering a policy question with a live order lookup:**
+![Policy answer](Project-Images/widget_policy_answer.png)
+
+**Order lookup:**
+![Order lookup](Project-Images/widget_order_lookup.png)
+
+**Branded admin login:**
+![Admin login](Project-Images/admin_login.png)
+
+**Admin analytics dashboard:**
+![Admin analytics](Project-Images/admin_analytics.png)
+
+**Performance tab:**
+![Performance tab](Project-Images/performance_result.png)
+
+**Escalation ticket queue:**
+![Escalation tickets](Project-Images/admin_tickets.png)
+
+**Automated evaluation harness results:**
+![Evaluation summary](Project-Images/evaluation_summary.png)
+
 ## What it does
 
 - Answers policy questions (returns, shipping, warranty, loyalty, payments)
@@ -43,14 +72,12 @@ pip install -r requirements.txt
 ```
 
 Create a `.env` file (not committed) with:
-```
 GEMINI_API_KEY=...
 SHOPIFY_STORE_DOMAIN=...
 SHOPIFY_ACCESS_TOKEN=...
 ADMIN_USERNAME=...
 ADMIN_PASSWORD=...
 FLASK_SECRET_KEY=...
-```
 
 Build the policy knowledge base index (re-run any time `policy_docs/`
 changes):
@@ -123,4 +150,3 @@ The knowledge base includes one intentionally planted policy conflict
 (order cancellation window: 1 hour per the cancellation policy vs. an
 incorrect 24 hours in the FAQ) to keep the conflict-detection feature
 exercised by ongoing testing — see `_conflict_manifest.md`.
-
