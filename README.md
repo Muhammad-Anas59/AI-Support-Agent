@@ -1,7 +1,6 @@
 # Verve Athletics — AI Support Agent
 
-A Shopify-integrated AI support agent with an activewear storefront demo,
-a customer-facing chat widget, and an authenticated admin console.
+A Shopify-integrated AI support agent with an activewear storefront, a customer-facing chat widget, and an authenticated admin console.
 
 ## Live
 
