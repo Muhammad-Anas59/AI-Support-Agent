@@ -140,7 +140,7 @@ python -m app.tests.evaluation_harness
 
 Runs the full test suite (policy Q&A, conflict detection, routing,
 sentiment, order lookup) against the live system and writes
-`app/tests/evaluation_report.md`. Current result: **98%+ (59/59 on the
+`app/tests/evaluation_report.md`. Current result: **100% (59/59) (59/59 on the
 latest run)** — a handful of cases can occasionally hit Gemini's
 free-tier rate limit mid-run and need a retry, which the harness handles
 automatically via backoff.
