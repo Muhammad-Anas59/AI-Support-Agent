@@ -10,3 +10,6 @@ app/data/*.faiss
 app/data/*.jsonl
 app/data/conflicts_log.json
 *.bak
+
+scan_results.txt
+*.bak
