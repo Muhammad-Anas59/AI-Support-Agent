@@ -9,3 +9,4 @@ app/data/*.json
 app/data/*.faiss
 app/data/*.jsonl
 app/data/conflicts_log.json
+*.bak
